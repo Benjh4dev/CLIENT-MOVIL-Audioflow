@@ -13,43 +13,43 @@
             <h5>Your Melody, Your Mood.</h5>
             </ion-row>
         <br />
-        <form>
+        <form @submit="addUser">
           <h2>Registro</h2>
           <ion-row responsive-sm class="ion-padding">
-          <h6>NOMBRE DE USUARIO</h6>
-          <ion-input
-          class="input"
-          mode="md"
-          v-model="username"
-          name="username"
-          type="text"
-          spellcheck="false"
-          fill="outline"
-          autocapitalize="off"
-          required
-          ></ion-input>
+            <h6>NOMBRE DE USUARIO</h6>
+            <ion-input
+            class="input"
+            mode="md"
+            v-model="username"
+            name="username"
+            type="text"
+            spellcheck="false"
+            fill="outline"
+            autocapitalize="off"
+            required
+            ></ion-input>
           
-          <h6>CORREO ELECTRÓNICO</h6>
-          <ion-input
-          class="input"
-          mode="md"
-          v-model="email"
-          name="email"
-          type="email"
-          fill="outline" 
-          required
-          ></ion-input> 
+            <h6>CORREO ELECTRÓNICO</h6>
+            <ion-input
+            class="input"
+            mode="md"
+            v-model="email"
+            name="email"
+            type="email"
+            fill="outline" 
+            required
+            ></ion-input> 
 
-          <h6>CONTRASEÑA</h6>
-          <ion-input
-          class="input"
-          mode="md"
-          v-model="password"
-          name="password"
-          type="password"
-          fill="outline" 
-          required
-          ></ion-input></ion-row>
+            <h6>CONTRASEÑA</h6>
+           <ion-input
+            class="input"
+            mode="md"
+            v-model="password"
+            name="password"
+            type="password"
+            fill="outline" 
+            required
+            ></ion-input></ion-row>
   
           <ion-row responsive-sm class="ion-padding">
             <ion-col>
@@ -65,11 +65,29 @@
         </form>
       </ion-content>
     </ion-page>
-  </template>
+</template>
   
     
     <script setup lang="ts">
     import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonImg } from '@ionic/vue';
+    import { ref } from 'vue';
+
+    const username = ref('');
+    const email = ref('');
+    const password = ref('');
+
+    const addUser = () => {
+      const url = '';
+      console.log(username.value);
+      console.log(email.value);
+      console.log(password.value);
+      const userData = {
+        username: username.value,
+        email: email.value,
+        password: password.value
+      };
+    };
+
     </script>
     
     <style scoped>
