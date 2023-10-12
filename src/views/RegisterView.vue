@@ -69,23 +69,32 @@
   
     
     <script setup lang="ts">
-    import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonImg } from '@ionic/vue';
+    import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonImg, IonRow, IonInput,IonButton,IonCol } from '@ionic/vue';
     import { ref } from 'vue';
 
     const username = ref('');
     const email = ref('');
     const password = ref('');
 
-    const addUser = () => {
-      const url = '';
+    const addUser = (event) => {
+      console.log('addUser fue llamado');
+      event.preventDefault();
+      // Verifica si el formulario se envió correctamente
+      if (username.value && email.value && password.value) {
+      // Realiza alguna acción con los datos
+      console.log("Formulario enviado");
       console.log(username.value);
       console.log(email.value);
       console.log(password.value);
-      const userData = {
-        username: username.value,
-        email: email.value,
-        password: password.value
-      };
+
+      // Limpia los campos después del envío si es necesario
+      username.value = '';
+      email.value = '';
+      password.value = '';
+      } else {
+        // Muestra un mensaje de error si algún campo está vacío
+        console.error("Por favor completa todos los campos.");
+      }
     };
 
     </script>
