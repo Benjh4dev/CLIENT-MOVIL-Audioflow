@@ -9,48 +9,62 @@
             ></ion-img> 
           </ion-row>
             <ion-row>  
-            <h1>AudioFlow</h1>
-            <h5>Your Melody, Your Mood.</h5>
-            </ion-row>
+            <h1>AudioFlow</h1></ion-row>
+            <ion-row>
+            <h5>Your Melody, Your Mood.</h5></ion-row>
         <br />
-        <form @submit="addUser">
-          <h2>Registro</h2>
+        <h2>Registro</h2>
+        <form @submit.prevent="addUser">
           <ion-row responsive-sm class="ion-padding">
-            <h6>NOMBRE DE USUARIO</h6>
-            <ion-input
-            class="input"
-            mode="md"
-            v-model="username"
-            name="username"
-            type="text"
-            spellcheck="false"
-            fill="outline"
-            autocapitalize="off"
-            required
-            ></ion-input>
+            <ion-row>
+              <ion-label class="label" position="stacked">NOMBRE DE USUARIO</ion-label>
+              <ion-input
+              class="input"
+              mode="md"
+              v-model="formData.username"
+              name="username"
+              type="text"
+              fill="outline"
+              autocapitalize="off"
+              required></ion-input>
+            </ion-row>
           
-            <h6>CORREO ELECTRÓNICO</h6>
-            <ion-input
-            class="input"
-            mode="md"
-            v-model="email"
-            name="email"
-            type="email"
-            fill="outline" 
-            required
-            ></ion-input> 
-
-            <h6>CONTRASEÑA</h6>
-           <ion-input
-            class="input"
-            mode="md"
-            v-model="password"
-            name="password"
-            type="password"
-            fill="outline" 
-            required
-            ></ion-input></ion-row>
-  
+            <ion-row>
+              <ion-label class="label" position="stacked">CORREO ELECTRÓNICO</ion-label>
+              <ion-input
+              class="input"
+              mode="md"
+              v-model="formData.email"
+              name="email"
+              type="email"
+              fill="outline" 
+              required></ion-input> 
+            </ion-row>
+            <ion-row>
+              <ion-label class="label" position="stacked">CONTRASEÑA</ion-label>
+              <ion-input
+              class="input"
+              mode="md"
+              v-model="formData.password"
+              name="password"
+              type="password"
+              fill="outline"
+              autocapitalize="off"
+              required></ion-input>
+            </ion-row>
+            <ion-row>
+              <ion-label class="label" position="stacked">CONFIRMAR CONTRASEÑA</ion-label>
+              <ion-input
+              class="input"
+              mode="md"
+              v-model="formData.confirmPassword"
+              name="confirmPassword"
+              type="password"
+              fill="outline"
+              autocapitalize="off"
+              required></ion-input>
+            </ion-row>
+          </ion-row>
           <ion-row responsive-sm class="ion-padding">
             <ion-col>
               <ion-button 
@@ -66,34 +80,57 @@
       </ion-content>
     </ion-page>
 </template>
-  
+
     
     <script setup lang="ts">
-    import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonImg, IonRow, IonInput,IonButton,IonCol } from '@ionic/vue';
+    import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonImg, IonRow, IonInput,IonButton,IonCol, IonLabel } from '@ionic/vue';
     import { ref } from 'vue';
+    import apiClient from '@/services/api'
 
-    const username = ref('');
-    const email = ref('');
-    const password = ref('');
+    interface FormData {
+      username: string;
+      email: string;
+      password: string;
+      confirmPassword: string;
+    }
+    
+    interface Errors {
+      [key: string]: string;
+    }
+    
+    const formData = ref<FormData>({
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
 
-    const addUser = (event) => {
+    const errors = ref<Errors>({});
+    
+    async function addUser(): Promise<void> {
+      errors.value = {};
       console.log('addUser fue llamado');
-      event.preventDefault();
       // Verifica si el formulario se envió correctamente
-      if (username.value && email.value && password.value) {
-      // Realiza alguna acción con los datos
-      console.log("Formulario enviado");
-      console.log(username.value);
-      console.log(email.value);
-      console.log(password.value);
+      if (formData.value.password != formData.value.confirmPassword) {
+        errors.value.confirmPassword = "Las contraseñas no coinciden";
+        return;
+      } try {
+        const { confirmPassword, ...dataToSend } = formData.value;
+        const response = await apiClient.post('/user/', dataToSend);
+      } catch (error: any) {
+        if(error.response && error.response.data.error) {
+          const zodErrors = error.response.data.error.issues;
+          const mappedErrors: Record<string, any> = {};
+          zodErrors.forEach((err: any) => {
+            const fieldName = err.path[0];
 
-      // Limpia los campos después del envío si es necesario
-      username.value = '';
-      email.value = '';
-      password.value = '';
-      } else {
-        // Muestra un mensaje de error si algún campo está vacío
-        console.error("Por favor completa todos los campos.");
+            if (!mappedErrors[fieldName]) {
+              mappedErrors[fieldName] = [];
+            }
+            mappedErrors[fieldName].push(err.message);
+            });
+            errors.value = mappedErrors;
+        }
       }
     };
 
@@ -116,6 +153,7 @@
     width: 85%;
     margin: 0 auto;
     opacity: 80%;
+    min-width: 280px;
     }
     .login-button {
       width:85%;
@@ -145,8 +183,8 @@
       color:#ffffff;
       margin: 0 auto;
     }
-    h6 {
-      font-size: 15px;
+    .label {
+      font-size: 14px;
       position:relative;
       left: 30px;
       color: #ffffff;
