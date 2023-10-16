@@ -26,7 +26,9 @@
               type="text"
               fill="outline"
               autocapitalize="off"
-              required></ion-input>
+              required>
+              </ion-input>
+              <p v-if="errors.username" class="error">{{ errors.username[0] }}</p>
             </ion-row>
           
             <ion-row>
@@ -39,6 +41,7 @@
               type="email"
               fill="outline" 
               required></ion-input> 
+              <p v-if="errors.email" class="error">{{ errors.email[0] }}</p>
             </ion-row>
             <ion-row>
               <ion-label class="label" position="stacked">CONTRASEÑA</ion-label>
@@ -51,6 +54,7 @@
               fill="outline"
               autocapitalize="off"
               required></ion-input>
+              <p v-if="errors.password" class="error">{{ errors.password[0] }}</p>
             </ion-row>
             <ion-row>
               <ion-label class="label" position="stacked">CONFIRMAR CONTRASEÑA</ion-label>
@@ -63,6 +67,7 @@
               fill="outline"
               autocapitalize="off"
               required></ion-input>
+              <p v-if="errors.confirmPassword" class="error">{{ errors.confirmPassword }}</p>
             </ion-row>
           </ion-row>
           <ion-row responsive-sm class="ion-padding">
@@ -83,7 +88,7 @@
 
     
     <script setup lang="ts">
-    import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonImg, IonRow, IonInput,IonButton,IonCol, IonLabel } from '@ionic/vue';
+    import {IonContent, IonPage, IonImg, IonRow, IonInput,IonButton,IonCol, IonLabel } from '@ionic/vue';
     import { ref } from 'vue';
     import apiClient from '@/services/api'
 
@@ -109,8 +114,6 @@
     
     async function addUser(): Promise<void> {
       errors.value = {};
-      console.log('addUser fue llamado');
-      // Verifica si el formulario se envió correctamente
       if (formData.value.password != formData.value.confirmPassword) {
         errors.value.confirmPassword = "Las contraseñas no coinciden";
         return;
@@ -203,6 +206,13 @@
       width: 15%;
       height: 15%;
       margin: 0 auto;
+    }
+    .error {
+      font-size: 14px;
+      text-align: center;
+      color: #ff0000;
+      margin: 0 auto;
+      font-weight: bold;
     }
     
     </style>
