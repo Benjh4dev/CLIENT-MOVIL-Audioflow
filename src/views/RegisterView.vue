@@ -73,7 +73,7 @@
                   expand="block" 
                   fill="outline"
                 >Registrarse</ion-button>
-                <h4>¿Ya tienes cuenta? Ingresa aquí</h4>
+                <h4>¿Ya tienes cuenta? <router-link to ="" class="link">Ingresa aquí</router-link></h4>
             </ion-col>
           </ion-row>
         </form>
@@ -164,6 +164,10 @@
       --border-width: 3px;
       
     }
+    .link {
+      color:white;
+      font-weight: bold;
+    }
     h1 {
       font-size: 40px;
       color: #ffffff;
@@ -191,7 +195,7 @@
     }
     h4 {
       color: #ffffff;
-      font-size: 15px;
+      font-size: 16px;
       text-align: center;
     }
   
