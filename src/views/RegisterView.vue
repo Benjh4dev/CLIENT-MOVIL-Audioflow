@@ -3,82 +3,86 @@
       <ion-content :fullscreen="true" class="container">
         <ion-row>
             <ion-img
-            class="display"
+            class="w-1/6 h-1/6 mx-auto"
             src="\images\icons\audioflow-logo.png"
             alt="Logo AudioFlow"
             ></ion-img> 
           </ion-row>
             <ion-row>  
-            <h1>AudioFlow</h1></ion-row>
+              <h1 class="text-[40px] text-white font-bold mx-auto my-0">AudioFlow</h1>
+            </ion-row>
             <ion-row>
-            <h5>Your Melody, Your Mood.</h5></ion-row>
+              <h5 class="text-white mx-auto my-0">Your Melody, Your Mood.</h5>
+            </ion-row>
         <br />
-        <h2>Registro</h2>
+        <h2 class="text-3xl text-white font-bold text-center mx-auto my-0">Registro</h2>
         <form @submit.prevent="addUser">
           <ion-row responsive-sm class="ion-padding">
             <ion-row>
-              <ion-label class="label" position="stacked">NOMBRE DE USUARIO</ion-label>
+              <ion-label class="text-white text-sm relative text-center indent-8 font-mono">NOMBRE DE USUARIO</ion-label>
               <ion-input
-              class="input"
-              mode="md"
-              v-model="formData.username"
-              name="username"
-              type="text"
-              fill="outline"
-              autocapitalize="off"
-              required>
+                mode="md"
+                v-model="formData.username"
+                id="username"
+                name="username"
+                type="text"
+                fill="outline"
+                autocapitalize="off"
+                :class="{ 'border-red-500': errors.username }" 
+                class="bg-gray-200 border border-transparent rounded-[1.25rem]  w-5/6 mx-auto opacity-80 min-w-[280px]">
               </ion-input>
-              <p v-if="errors.username" class="error">{{ errors.username[0] }}</p>
+              <p v-if="errors.username" class="text-sm text-center text-[#ff0000] font-[bold] mx-auto my-0">{{ errors.username[0] }}</p>
             </ion-row>
           
             <ion-row>
-              <ion-label class="label" position="stacked">CORREO ELECTRÓNICO</ion-label>
+              <ion-label class="text-white text-sm relative text-center indent-8 font-mono">CORREO ELECTRÓNICO</ion-label>
               <ion-input
-              class="input"
-              mode="md"
-              v-model="formData.email"
-              name="email"
-              type="email"
-              fill="outline" 
-              required></ion-input> 
-              <p v-if="errors.email" class="error">{{ errors.email[0] }}</p>
+                mode="md"
+                v-model="formData.email"
+                name="email"
+                fill="outline" 
+                :class="{ 'border-red-500': errors.email }"
+                class="bg-gray-200 border border-transparent rounded-[1.25rem] w-5/6 mx-auto opacity-80 min-w-[280px]">
+              </ion-input> 
+              <p v-if="errors.email" class="text-sm text-center text-[#ff0000] font-[bold] mx-auto my-0">{{ errors.email[0] }}</p>
             </ion-row>
             <ion-row>
-              <ion-label class="label" position="stacked">CONTRASEÑA</ion-label>
+              <ion-label class="text-white text-sm relative text-center indent-8 font-mono">CONTRASEÑA</ion-label>
               <ion-input
-              class="input"
-              mode="md"
-              v-model="formData.password"
-              name="password"
-              type="password"
-              fill="outline"
-              autocapitalize="off"
-              required></ion-input>
-              <p v-if="errors.password" class="error">{{ errors.password[0] }}</p>
+                mode="md"
+                v-model="formData.password"
+                name="password"
+                type="password"
+                fill="outline"
+                autocapitalize="off"
+                :class="{ 'border-red-500': errors.password }"
+                class="bg-gray-200 border border-transparent rounded-[1.25rem] w-5/6 mx-auto opacity-80 min-w-[280px]"></ion-input>
+              <p v-if="errors.password" class="text-sm text-center text-[#ff0000] font-[bold] mx-auto my-0">{{ errors.password[0] }}</p>
             </ion-row>
             <ion-row>
-              <ion-label class="label" position="stacked">CONFIRMAR CONTRASEÑA</ion-label>
+              <ion-label class="text-white text-sm relative text-center indent-8 font-mono">CONFIRMAR CONTRASEÑA</ion-label>
               <ion-input
-              class="input"
-              mode="md"
-              v-model="formData.confirmPassword"
-              name="confirmPassword"
-              type="password"
-              fill="outline"
-              autocapitalize="off"
-              required></ion-input>
-              <p v-if="errors.confirmPassword" class="error">{{ errors.confirmPassword }}</p>
+                mode="md"
+                v-model="formData.confirmPassword"
+                name="confirmPassword"
+                type="password"
+                fill="outline"
+                autocapitalize="off"
+                :class="{ 'border-red-500': errors.confirmPassword }"
+                class="bg-gray-200 border border-transparent rounded-[1.25rem] w-5/6 mx-auto opacity-80 min-w-[280px]">
+              </ion-input>
+              <p v-if="errors.confirmPassword" class="text-sm text-center text-[#ff0000] font-[bold] mx-auto my-0">{{ errors.confirmPassword }}</p>
             </ion-row>
           </ion-row>
           <ion-row responsive-sm class="ion-padding">
             <ion-col>
               <ion-button 
-                  class="login-button"
+                  class="w-4/5 mx-auto font-bold text-white border border-white border-4 rounded-2xl"
                   type="submit" 
                   expand="block" 
                   fill="outline"
                 >Registrarse</ion-button>
-                <h4>¿Ya tienes cuenta? <router-link to ="" class="link">Ingresa aquí</router-link></h4>
+                <p class="text-white text-base text-center">¿Ya tienes cuenta? <router-link to ="" class="underline font-[bold];">Ingresa aquí</router-link></p>
             </ion-col>
           </ion-row>
         </form>
@@ -148,72 +152,6 @@
       top: 5%;
       --ion-background-color: linear-gradient(90deg,#8c52ff,#00bf63);
     }
-  
-    .input {
-    --border-width: 0px;
-    background-color: rgb(217, 217, 238);
-    border-radius: 15px;
-    width: 85%;
-    margin: 0 auto;
-    opacity: 80%;
-    min-width: 280px;
-    }
-    .login-button {
-      width:85%;
-      margin: 0 auto;
-      font-weight: bold;
-      color: #ffffff;
-      --border-color: #ffffff;
-      --border-width: 3px;
-      
-    }
-    .link {
-      color:white;
-      font-weight: bold;
-    }
-    h1 {
-      font-size: 40px;
-      color: #ffffff;
-      font-weight:bold;
-      margin: 0 auto;
-      
-    }
-    h2 {
-      font-size: 30px;
-      color: #ffffff;
-      font-weight:bold;
-      margin: 0 auto;
-      text-align: center;
-      
-    }
-    h5 {
-      color:#ffffff;
-      margin: 0 auto;
-    }
-    .label {
-      font-size: 14px;
-      position:relative;
-      left: 30px;
-      color: #ffffff;
-    }
-    h4 {
-      color: #ffffff;
-      font-size: 16px;
-      text-align: center;
-    }
-  
-    .display {
-      width: 15%;
-      height: 15%;
-      margin: 0 auto;
-    }
-    .error {
-      font-size: 14px;
-      text-align: center;
-      color: #ff0000;
-      margin: 0 auto;
-      font-weight: bold;
-    }
-    
+
     </style>
     
