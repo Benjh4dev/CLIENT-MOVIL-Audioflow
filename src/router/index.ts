@@ -1,14 +1,13 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 
+import RegisterView from '../views/RegisterView.vue'
+
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '',
-    redirect: '/folder/Inbox'
-  },
-  {
-    path: '/folder/:id',
-    component: () => import ('../views/FolderPage.vue')
+    path: '/',
+    name: 'Register',
+    component: RegisterView
   }
 ]
 
