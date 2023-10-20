@@ -57,8 +57,15 @@ Claro, puedes crear una vista de inicio de sesión (`LoginView.vue`) con un esti
               fill="outline"
             >Iniciar Sesión</ion-button>
             <p class="pt-2 text-white text-base text-center">¿No tienes cuenta? <router-link to="/registro" class="underline font-bold">Regístrate aquí</router-link></p>
+
           </ion-col>
         </ion-row>
+        <ion-row responsive-sm class="ion-padding">
+            <ion-col style="margin-top: 12rem;"> 
+                <router-link to="/ingresar-como-invitado" class="text-white underline font-bold block text-center">Ingresar como invitado</router-link>
+            </ion-col>
+        </ion-row>
+        
       </form>
     </ion-content>
   </ion-page>
@@ -80,8 +87,7 @@ const formData = ref<FormData>({
 });
 
 async function loginUser(): Promise<void> {
-  // Aquí puedes agregar la lógica para autenticar al usuario
-  // Por ejemplo, enviar una solicitud al servidor para verificar las credenciales.
+  // autentificación del usuario
 }
 
 </script>
@@ -96,7 +102,3 @@ async function loginUser(): Promise<void> {
 }
 </style>
 ```
-
-En este código, he creado una vista de inicio de sesión con campos de "Nombre de Usuario" y "Contraseña". Debes agregar la lógica para autenticar al usuario en la función `loginUser`. Además, he incluido un enlace para redirigir a los usuarios a la vista de registro si no tienen una cuenta.
-
-Asegúrate de que los estilos y la estructura coincidan con la vista de registro para mantener la coherencia en la apariencia de tu aplicación.
