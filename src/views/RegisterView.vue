@@ -82,7 +82,7 @@
                   expand="block" 
                   fill="outline"
                 >Registrarse</ion-button>
-                <p class="pt-2 text-white text-base text-center">¿Ya tienes cuenta? <router-link to ="" class="underline font-[bold];">Ingresa aquí</router-link></p>
+                <p class="pt-2 text-white text-base text-center">¿Ya tienes cuenta? <router-link to ="/login" class="underline font-[bold];">Ingresa aquí</router-link></p>
             </ion-col>
           </ion-row>
         </form>
@@ -140,7 +140,7 @@ async function addUser(): Promise<void> {
         errors.value = mappedErrors;
     }
   }
-};
+}
 
 </script>
     
