@@ -1,6 +1,4 @@
-Claro, puedes crear una vista de inicio de sesión (`LoginView.vue`) con un estilo similar al de la vista de registro. Aquí tienes el código:
 
-```vue
 <template>
   <ion-page>
     <ion-content :fullscreen="true" class="container">
@@ -20,14 +18,14 @@ Claro, puedes crear una vista de inicio de sesión (`LoginView.vue`) con un esti
       <br />
       <h2 class="text-3xl text-white font-bold text-center mx-auto">Iniciar Sesión</h2>
       <form @submit.prevent="loginUser">
-        <ion-row responsive-sm class="ion-padding">
+        <ion-row responsive-sm class="gap-4 ion-padding">
           <ion-row>
-            <ion-label class="text-white text-sm relative text-center indent-8 font-normal">NOMBRE DE USUARIO</ion-label>
+            <ion-label class="text-white my-2 text-sm relative text-center indent-8 font-normal">CORREO ELECTRÓNICO</ion-label>
             <ion-input
               mode="md"
-              v-model="formData.username"
-              id="username"
-              name="username"
+              v-model="formData.email"
+              id="email"
+              name="email"
               type="text"
               fill="outline"
               autocapitalize="off"
@@ -36,7 +34,8 @@ Claro, puedes crear una vista de inicio de sesión (`LoginView.vue`) con un esti
           </ion-row>
 
           <ion-row>
-            <ion-label class="text-white text-sm relative text-center indent-8 font-normal">CONTRASEÑA</ion-label>
+            <ion-label class="text-white my-2 text-sm relative text-center indent-8 font-normal">CONTRASEÑA</ion-label>
+            
             <ion-input
               mode="md"
               v-model="formData.password"
@@ -46,6 +45,7 @@ Claro, puedes crear una vista de inicio de sesión (`LoginView.vue`) con un esti
               autocapitalize="off"
               class="bg-gray-200 text-black border border-transparent rounded-[1.25rem] w-5/6 mx-auto opacity-80 min-w-[280px]"
             ></ion-input>
+            <p v-if="errors" class="pt-3 pl-2 pb-1 text-sm text-start indent-8 text-[#ff0000] font-bold">{{ errors}}</p>
           </ion-row>
         </ion-row>
         <ion-row responsive-sm class="ion-padding">
@@ -75,20 +75,53 @@ Claro, puedes crear una vista de inicio de sesión (`LoginView.vue`) con un esti
 import { IonContent, IonPage, IonImg, IonRow, IonInput, IonButton, IonCol, IonLabel } from '@ionic/vue';
 import { ref } from 'vue';
 import apiClient from '@/services/api';
+import { useRouter } from 'vue-router';
+
+
+const errors = ref<string>(''); 
 
 interface FormData {
-  username: string;
+  email: string;
   password: string;
 }
 
 const formData = ref<FormData>({
-  username: '',
+  email: '',
   password: '',
 });
 
+const router = useRouter();
+
 async function loginUser(): Promise<void> {
-  // autentificación del usuario
-}
+  errors.value = '';
+  try {
+    const response = await apiClient.post('/auth', formData.value);
+    console.log(response);
+    if (response.status == 200) {
+      router.push('/');
+    }
+    
+  } catch (error: any) {    
+      if (error.response) {
+        if (error.response.status == 400) {
+
+          errors.value = 'Ingrese los campos correctamente';
+          console.log(errors.value); 
+          return;
+        }
+        else if (error.response.status == 401) {
+          errors.value = error.response.data.message;
+          console.log(errors.value); 
+          return;
+        }
+      } 
+      errors.value = "Hubo un error, inténtelo más tarde";
+    console.log(errors.value);
+    }
+  }
+  
+  
+
 
 </script>
 
