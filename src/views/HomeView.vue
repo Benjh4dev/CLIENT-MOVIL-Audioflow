@@ -17,7 +17,6 @@
 
 
 <script setup lang="ts">
-const { createPinia } = require('pinia')
 const props = defineProps({
     email: String || "Invitado",
 });
