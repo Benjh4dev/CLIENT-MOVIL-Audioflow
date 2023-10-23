@@ -1,15 +1,22 @@
 <template>
-    <ion-page>
+    <ion-page >
         <ion-header>
-            <ion-toolbar>
-                <ion-title>Canciones</ion-title>
-            </ion-toolbar>
+            <TopBar></TopBar>
         </ion-header>
         <ion-content>
-            <ion-list>
-                <h1 class="text-2xl ml-5 font-bold">
+            <ion-list class="bg-[#212121]">
+                <h1 class="text-2xl ml-5 mb-3 mt-5 font-bold">
                     Recomendaciones
                 </h1>
+
+
+                <li v-for="number in 30">
+                    <SongRow></SongRow>
+                </li>
+                
+                
+
+
             </ion-list>
         </ion-content>
     </ion-page>
@@ -17,8 +24,8 @@
 
 
 <script setup lang="ts">
-const props = defineProps({
-    email: String || "Invitado",
-});
+import SongRow from '../components/SongRow.vue'
+import TopBar from '../components/TopBar.vue'
+
 
 </script>
