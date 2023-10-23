@@ -6,7 +6,7 @@
                 <h1>Nombre Canción</h1>
                 <h2>Artista</h2>
             </div>
-            <h2 class="justify-right">2:33</h2>
+            <h2 class="justify-right">233</h2>
         </div>
     </script>
 </template>

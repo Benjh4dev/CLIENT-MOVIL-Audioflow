@@ -20,6 +20,7 @@
     "@capacitor/status-bar": "5.0.6",
     "@ionic/vue": "^7.0.0",
     "@ionic/vue-router": "^7.0.0",
+    "@types/vue": "^2.0.0",
     "axios": "^1.5.1",
     "ionicons": "^7.0.0",
     "sass": "^1.69.3",

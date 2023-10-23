@@ -10,6 +10,7 @@
                 <h1 class="text-2xl ml-5 font-bold">
                     Recomendaciones
                 </h1>
+                <MusicPlayer></MusicPlayer>
             </ion-list>
         </ion-content>
     </ion-page>
@@ -17,8 +18,5 @@
 
 
 <script setup lang="ts">
-const props = defineProps({
-    email: String || "Invitado",
-});
-
+import MusicPlayer from '@/components/MusicPlayer.vue';
 </script>
