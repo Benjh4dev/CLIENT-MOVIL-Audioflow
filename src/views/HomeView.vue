@@ -7,8 +7,8 @@
         </ion-header>
         <ion-content>
             <ion-list>
-                <h1>
-                    Canciones de {{ email }}
+                <h1 class="text-2xl ml-5 font-bold">
+                    Recomendaciones
                 </h1>
             </ion-list>
         </ion-content>
