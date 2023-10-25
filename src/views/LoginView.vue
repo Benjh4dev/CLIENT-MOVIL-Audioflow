@@ -72,12 +72,11 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/stores/user'
 import { IonContent, IonPage, IonImg, IonRow, IonInput, IonButton, IonCol, IonLabel } from '@ionic/vue';
 import { ref } from 'vue';
 import apiClient from '@/services/api';
 import { useRouter } from 'vue-router';
-
+import { useMainStore } from '@/stores/main';
 
 const errors = ref<string>(''); 
 
@@ -93,17 +92,13 @@ const formData = ref<FormData>({
 
 const router = useRouter();
 
-const userStore = useUserStore()
-
 async function loginUser(): Promise<void> {
   errors.value = '';
   try {
     const response = await apiClient.post('/auth', formData.value);
     console.log(response);
-    const userDataLogin = async () => {
-      await userStore.login(formData.value.email, formData.value.password)
-    }
     if (response.status == 200) {
+      useMainStore().loginUser(response.data);
       router.push('/');
     }
     

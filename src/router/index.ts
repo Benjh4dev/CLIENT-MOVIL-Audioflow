@@ -4,12 +4,13 @@ import { RouteRecordRaw } from 'vue-router';
 import RegisterView from '../views/RegisterView.vue'
 import LoginView from '@/views/LoginView.vue';
 import HomeView from '@/views/HomeView.vue';
+import { useMainStore } from '@/stores/main';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
-    component: HomeView,
+    name: 'login',
+    component: LoginView,
   },
   {
     path: '/registro',
@@ -24,6 +25,16 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const mainStore = useMainStore();
+
+  if (to.meta.requiresAuth && !mainStore.$state.token) {
+    next('/');
+  } else {
+    next();
+  }
 })
 
 export default router
