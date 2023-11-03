@@ -4,13 +4,14 @@ import { RouteRecordRaw } from 'vue-router';
 import RegisterView from '../views/RegisterView.vue'
 import LoginView from '@/views/LoginView.vue';
 import HomeView from '@/views/HomeView.vue';
+import SongView from '@/views/SongView.vue';
 import { useMainStore } from '@/stores/main';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'login',
-    component: LoginView,
+    component: SongView,
   },
   {
     path: '/registro',

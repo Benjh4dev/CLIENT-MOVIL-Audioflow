@@ -1,8 +1,9 @@
 export interface Song {
-    id: number;
+    user_id: string;
+    id: string;
     name: string;
     artist: string;
     duration: number;
-    pic_url: string;
-    url: string;
+    coverURL: string;
+    audioURL: string;
 }
