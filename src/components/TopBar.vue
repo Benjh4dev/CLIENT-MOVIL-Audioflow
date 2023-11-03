@@ -1,6 +1,11 @@
 <template>
     <div class="flex h-[70px] bg-[#212121] sticky top-0 items-center">
-        <img src="../../public/images/icons/audioflow-logo.png" class=" h-[40px] w-[40px] ml-5">
-        <img src="../../public/images/icons/guest-pic.png" class=" h-[40px] w-[40px] ml-auto mr-5">
+        <button class="h-[35px] w-[35px] ml-5">
+            <img src="/images/icons/audioflow-logo.png" class=" h-[35px] w-[35px]">
+        </button>
+        
+        <button class="h-[35px] w-[35px] ml-auto mr-5">
+            <img src="/images/icons/guest-pic.png" class=" h-[35px] w-[35px]">
+        </button>    
     </div>
 </template>
