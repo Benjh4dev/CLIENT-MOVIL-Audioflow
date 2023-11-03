@@ -7,7 +7,7 @@
             <div class="bg-[#212121] py-5">
                 <div class="flex space-x-5 mx-5">
                     <img src="/images/icons/guest-pic.png" class=" h-[70px] w-[70px]">
-                    <div>
+                    <div class="self-center">
                         <h1 class="font-bold text-2xl">Nombre Apellido</h1>
                         <h1>username@gmail.com</h1>
                     </div>
