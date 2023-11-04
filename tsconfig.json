@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "types": ["vuetify"],
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "allowJs": true,
     "target": "ESNext",
     "baseUrl": "./",
     "useDefineForClassFields": true,
