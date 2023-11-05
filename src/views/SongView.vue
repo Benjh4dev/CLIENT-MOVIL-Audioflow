@@ -1,17 +1,23 @@
 <template>
     <ion-page>
-        <ion-header class ="text-center mt-32">
-            <img  class = "w-1/12" src="/images/icons/chevron-down-outline.png" style="filter: invert(1)" />
-            <ion-title class="text-white">Reproduciendo Canción</ion-title>
-        </ion-header>
-
         <ion-content class="ion-padding" fullscreen>
-            <div class="song-container">
-                <img class="song-image" src="song-image-url" alt="Song Image" />
-                <ion-button class="play-button" fill="clear" color="light" @click="playSong">
-                    <ion-icon :icon="isPlaying ? pauseIcon : playIcon"></ion-icon>
-                </ion-button>
-            </div>
+            <ion-grid>
+                <ion-row class="pt-24">
+                    <ion-col class ="flex justify-center items-center" size="2"><img  class = "w-1/2" src="/images/icons/chevron-down-outline.png" style="filter: invert(1)" /></ion-col>
+                    <ion-col size="8"><h4 class="text-white text-center">Reproduciendo Canción</h4> </ion-col>
+                    <ion-col class ="flex justify-center items-center" size="2"><img class ="w-1/2" src="/images/icons/icon-2.png" style="filter:invert(1)" /></ion-col>
+                </ion-row>
+
+                <ion-row class="pt-16">
+                    <ion-col class="flex justify-center items-center"><img src="/images/albumCovers/DiariesOfAHero.png" alt="Song Image" /></ion-col>
+
+                </ion-row>
+
+                <ion-row>
+                    <ion-col size="10">Columna 1</ion-col>
+                    <ion-col size="2">Columna 2</ion-col>
+                </ion-row>
+            </ion-grid>
         </ion-content>
     </ion-page>
 </template>
