@@ -26,7 +26,7 @@
                 id="username"
                 name="username"
                 type="text"
-                fill="outline"
+                
                 autocapitalize="off"
                 :class="{ 'border-red-500': errors.username }" 
                 class="bg-gray-200 text-black border border-transparent rounded-[1.25rem] w-5/6 mx-auto opacity-80 min-w-[280px]">
@@ -40,7 +40,7 @@
                 mode="md"
                 v-model="formData.email"
                 name="email"
-                fill="outline" 
+                 
                 :class="{ 'border-red-500': errors.email }"
                 class="bg-gray-200 text-black border border-transparent rounded-[1.25rem] w-5/6 mx-auto opacity-80 min-w-[280px]">
               </ion-input> 
@@ -53,7 +53,7 @@
                 v-model="formData.password"
                 name="password"
                 type="password"
-                fill="outline"
+                
                 autocapitalize="off"
                 :class="{ 'border-red-500': errors.password }"
                 class="bg-gray-200 text-black border border-transparent rounded-[1.25rem] w-5/6 mx-auto opacity-80 min-w-[280px]"></ion-input>
@@ -66,7 +66,7 @@
                 v-model="formData.confirmPassword"
                 name="confirmPassword"
                 type="password"
-                fill="outline"
+                
                 autocapitalize="off"
                 :class="{ 'border-red-500': errors.confirmPassword }"
                 class="bg-gray-200 text-black border border-transparent rounded-[1.25rem] w-5/6 mx-auto opacity-80 min-w-[280px]">

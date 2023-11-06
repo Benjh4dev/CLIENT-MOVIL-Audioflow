@@ -27,7 +27,6 @@
               id="email"
               name="email"
               type="text"
-              fill="outline"
               autocapitalize="off"
               class="bg-gray-200 text-black border border-transparent rounded-[1.25rem] w-5/6 mx-auto opacity-80 min-w-[280px]"
             ></ion-input>
@@ -41,7 +40,6 @@
               v-model="formData.password"
               name="password"
               type="password"
-              fill="outline"
               autocapitalize="off"
               class="bg-gray-200 text-black border border-transparent rounded-[1.25rem] w-5/6 mx-auto opacity-80 min-w-[280px]"
             ></ion-input>
