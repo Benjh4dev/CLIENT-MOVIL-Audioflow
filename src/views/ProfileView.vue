@@ -12,11 +12,8 @@
                         <h1>username@gmail.com</h1>
                     </div>
                 </div>
-                <div class="flex space-x-4 justify-center my-5 ">
-                    <button class="bg-white text-black font-bold py-2 rounded-3xl w-[120px] text-sm"> Subir canción</button>
-                    <button class="bg-white text-black font-bold py-2 rounded-3xl w-[120px] text-sm"> Crear playlist</button>
-                </div>
-                <div class="flex space-x-4 justify-center">
+
+                <div class="flex space-x-4 justify-center mt-5">
                     <button class= "text-white py-2 rounded-3xl w-[120px] border-solid border border-white text-sm"> Mis canciones</button>
                     <button class="text-white py-2 rounded-3xl w-[120px] border-solid border border-white text-sm"> Mis playlist</button>
                 </div>
