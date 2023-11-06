@@ -26,7 +26,7 @@
                     <ion-col size="2" class="flex justify-center items-center"><img  class = "w-1/2" src="/images/icons/shuffle.png" style="filter: invert(1)" /></ion-col>
                     <ion-col size="2" class="flex justify-center items-center"><img  class = "w-1/2 scale-x-[-1]" src="/images/icons/music-player.png" style="filter: invert(1)" /></ion-col>
                     <ion-col size="4" class="flex justify-center items-center">
-                        <ion-button slot="icon-only" @click="playSong" :icon="isPlaying ? pauseIcon : playIcon"></ion-button>
+                        <ion-button fill="clear" @click="playSong"><ion-icon :icon="isPlaying ? pauseIcon : playIcon"></ion-icon></ion-button>
                     </ion-col>
                     <ion-col size="2" class="flex justify-center items-center"><img  class = "w-1/2" src="/images/icons/music-player.png" style="filter: invert(1)" /></ion-col>
                     <ion-col size="2" class="flex justify-center items-center"><img  class = "w-1/2" src="/images/icons/replay.png" style="filter: invert(1)" /></ion-col>
@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar, IonImg, IonRange } from '@ionic/vue';
-import {  playCircleOutline, pauseCircleOutline, chevronDownOutline } from 'ionicons/icons';
+import {  playCircleOutline, pauseCircleOutline} from 'ionicons/icons';
 
 
 export default {
@@ -57,7 +57,7 @@ export default {
         return {
             isPlaying: false,
             playIcon: playCircleOutline,
-            pauseIcon:  pauseCircleOutline,
+            pauseIcon: pauseCircleOutline,
         };
     },
     methods: {
@@ -73,7 +73,6 @@ ion-content {
     --background: #000;
 }
 
-
 ion-range {
     --bar-background: #ffffff;
     --bar-background-active: #ffffff;
@@ -86,13 +85,9 @@ ion-range {
 
 }
 
-
-.song-image {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 20px;
+ion-icon {
+  font-size: 64px;
+  color:#ffffff;
 }
 
 </style>
