@@ -3,7 +3,9 @@
         <ion-content class="ion-padding" fullscreen>
             <ion-grid v-if="player.currentSong">
                 <ion-row class="pt-16">
-                    <ion-col class ="flex justify-center items-center" size="2"><img  class = "w-1/2" src="/images/icons/chevron-down-outline.png" style="filter: invert(1)" /></ion-col>
+                    <ion-col class ="flex justify-center items-center" size="2">
+                    <router-link to="/" ><img  class = "w-1/2" src="/images/icons/chevron-down-outline.png" style="filter: invert(1)" /></router-link>
+                    </ion-col>
                     <ion-col size="8"><h4 class="text-white text-center">Reproduciendo Canción</h4> </ion-col>
                     <ion-col class ="flex justify-center items-center" size="2"><img class ="w-1/2" src="/images/icons/icon-2.png" style="filter:invert(1)" /></ion-col>
                 </ion-row>
@@ -25,19 +27,19 @@
                 <ion-row>
                     <ion-col size="2" class="flex justify-center items-center"><img  class = "w-1/2" src="/images/icons/shuffle.png" style="filter: invert(1)" /></ion-col>
                     <ion-col size="2" class="flex justify-center items-center">
-                        <ion-button @click="prevSong">
-                            <img  class = "w-1/2 scale-x-[-1]" src="/images/icons/music-player.png" style="filter: invert(1)" />
+                        <ion-button fill="clear" @click="prevSong">
+                            <SkipBackward class="text-white" :size="30" />
                         </ion-button>
                     </ion-col>
                     <ion-col size="4" class="flex justify-center items-center">
                         <ion-button fill="clear" @click="togglePlay">
-                            <Play v-if="!player.isPlaying" :size="25" />
-                            <Pause v-if="player.isPlaying" :size="25" />
+                            <Play class="text-white" v-if="!player.isPlaying" :size="40" />
+                            <Pause class="text-white" v-if="player.isPlaying" :size="40" />
                         </ion-button>
                     </ion-col>
                     <ion-col size="2" class="flex justify-center items-center">
-                        <ion-button @click="nextSong">
-                            <img  class = "w-1/2" src="/images/icons/music-player.png" style="filter: invert(1)" />
+                        <ion-button fill="clear" @click="nextSong">
+                            <SkipForward class="text-white" :size="30" />
                         </ion-button>
                     </ion-col>
                     <ion-col size="2" class="flex justify-center items-center"><img  class = "w-1/2" src="/images/icons/replay.png" style="filter: invert(1)" /></ion-col>
@@ -55,14 +57,23 @@
 </template>
 
 <script lang="ts">
-import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar, IonImg, IonRange } from '@ionic/vue';
+import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar, IonImg, IonRange, IonGrid, IonRow, IonCol} from '@ionic/vue';
 import { playCircleOutline, pauseCircleOutline} from 'ionicons/icons';
+import Play from 'vue-material-design-icons/Play.vue';
+import Pause from 'vue-material-design-icons/Pause.vue';
+import SkipBackward from 'vue-material-design-icons/SkipBackward.vue';
+import SkipForward from 'vue-material-design-icons/SkipForward.vue';
 import { ref, watch, computed, onMounted, nextTick } from 'vue';
+
 import { usePlayerStore } from '@/stores/player';
 
 export default {
     name: 'SongView',
     components: {
+        SkipBackward,
+        SkipForward,
+        Play,
+        Pause,
         IonButton,
         IonContent,
         IonHeader,
@@ -72,6 +83,9 @@ export default {
         IonToolbar,
         IonImg,
         IonRange,
+        IonGrid,
+        IonRow, 
+        IonCol,
     },
     setup() {
         const player = usePlayerStore();
@@ -157,6 +171,10 @@ export default {
         const formattedDuration = computed(() => player.currentSong ? formatTime(player.currentSong.duration) : '0:00');
 
         return {
+            SkipBackward,
+            SkipForward,
+            Play,
+            Pause,
             player,
             pauseCircleOutline,
             playCircleOutline,

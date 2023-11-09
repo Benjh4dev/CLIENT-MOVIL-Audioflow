@@ -13,32 +13,38 @@ const routes: Array<RouteRecordRaw> = [
     component: HomeView,
   },
   {
-    path: '/registro',
+    path: '/register',
     component: RegisterView,
+    meta: { requiresAuth: false },
   },
   {
     path: '/login',
     component: LoginView,
+    meta: { requiresAuth: false },
   },
   {
-    path: '/cancion',
+    path: '/song',
     component: SongView,
   }
 ]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes
-})
+  history: createWebHistory(),
+  routes,
+});
 
+// Guardia de navegación para verificar autenticación
 router.beforeEach((to, from, next) => {
   const mainStore = useMainStore();
 
   if (to.meta.requiresAuth && !mainStore.$state.token) {
     next('/');
+    console.log('No autenticado');
+    return;
   } else {
+    console.log('Autenticado');
     next();
   }
-})
+});
 
 export default router

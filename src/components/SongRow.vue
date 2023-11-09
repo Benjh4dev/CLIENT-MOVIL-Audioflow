@@ -1,5 +1,5 @@
 <template>
-    <div class="text-white flex h-[70px] items-center">
+    <div @click="playSong" class="text-white flex h-[70px] items-center">
         <img :src="props.song.coverURL"
             class="h-[50px] w-[50px] ml-5 rounded-md">
         <div class="ml-3">
@@ -15,6 +15,8 @@
 <script setup lang="ts">
 
 import { Song } from '../interfaces';
+import { usePlayerStore } from '@/stores/player';
+const playerStore = usePlayerStore();
 
 const props = defineProps({
     song: {
@@ -22,4 +24,8 @@ const props = defineProps({
         required: true
     }
 });
+const playSong = () => {
+    console.log('Reproduciendo canción');
+    playerStore.playSong(props.song);
+};
 </script>
