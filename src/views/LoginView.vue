@@ -56,13 +56,13 @@
               expand="block"
               fill="outline"
             >Iniciar Sesión</ion-button>
-            <p class="pt-2 text-white text-base text-center">¿No tienes cuenta? <router-link to="/registro" class="underline font-bold">Regístrate aquí</router-link></p>
+            <p class="pt-2 text-white text-base text-center">¿No tienes cuenta? <router-link to="/register" class="underline font-bold">Regístrate aquí</router-link></p>
 
           </ion-col>
         </ion-row>
         <ion-row responsive-sm class="ion-padding">
             <ion-col style="margin-top: 12rem;"> 
-                <router-link to="/ingresar-como-invitado" class="text-white underline font-bold block text-center">Ingresar como invitado</router-link>
+                <router-link to="/" class="text-white underline font-bold block text-center">Ingresar como invitado</router-link>
             </ion-col>
         </ion-row>
         
@@ -76,7 +76,7 @@ import { IonContent, IonPage, IonImg, IonRow, IonInput, IonButton, IonCol, IonLa
 import { ref } from 'vue';
 import apiClient from '@/services/api';
 import { useRouter } from 'vue-router';
-
+import { useMainStore } from '@/stores/main';
 
 const errors = ref<string>(''); 
 
@@ -98,6 +98,7 @@ async function loginUser(): Promise<void> {
     const response = await apiClient.post('/auth', formData.value);
     console.log(response);
     if (response.status == 200) {
+      useMainStore().loginUser(response.data);
       router.push('/');
     }
     
@@ -119,6 +120,8 @@ async function loginUser(): Promise<void> {
     console.log(errors.value);
     }
   }
+  
+  
   
   
 
