@@ -10,8 +10,7 @@ import { useMainStore } from '@/stores/main';
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'login',
-    component: SongView,
+    component: HomeView,
   },
   {
     path: '/registro',
@@ -20,6 +19,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     component: LoginView,
+  },
+  {
+    path: '/cancion',
+    component: SongView,
   }
 ]
 

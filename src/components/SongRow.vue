@@ -1,0 +1,25 @@
+<template>
+    <div class="text-white flex h-[70px] items-center">
+        <img :src="props.song.coverURL"
+            class="h-[50px] w-[50px] ml-5 rounded-md">
+        <div class="ml-3">
+            <h1 class="font-bold text-l">{{ props.song.name }} </h1>
+            <h2 class="text-xs">{{ props.song.artist }}</h2>
+        </div>
+        <div class="text-right ml-auto mr-5">
+            <h2>{{ props.song.duration }}</h2>
+        </div>
+    </div>
+</template>
+
+<script setup lang="ts">
+
+import { Song } from '../interfaces';
+
+const props = defineProps({
+    song: {
+        type: Object as () => Song,
+        required: true
+    }
+});
+</script>
