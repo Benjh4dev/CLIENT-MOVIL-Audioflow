@@ -5,6 +5,7 @@ import RegisterView from '../views/RegisterView.vue'
 import LoginView from '@/views/LoginView.vue';
 import HomeView from '@/views/HomeView.vue';
 import SongView from '@/views/SongView.vue';
+import ProfileViewVue from '@/views/ProfileView.vue';
 import { useMainStore } from '@/stores/main';
 
 const routes: Array<RouteRecordRaw> = [
@@ -25,6 +26,12 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/song',
     component: SongView,
+  },
+  {
+    path: '/profile',
+    component: ProfileViewVue,
+    meta: { requiresAuth: true },
+  },
   }
 ]
 
