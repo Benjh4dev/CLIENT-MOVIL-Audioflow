@@ -7,7 +7,6 @@
                     <router-link to="/" ><img  class = "w-1/2" src="/images/icons/chevron-down-outline.png" style="filter: invert(1)" /></router-link>
                     </ion-col>
                     <ion-col size="8"><h4 class="text-white text-center">Reproduciendo Canción</h4> </ion-col>
-                    <ion-col class ="flex justify-center items-center" size="2"><img class ="w-1/2" src="/images/icons/icon-2.png" style="filter:invert(1)" /></ion-col>
                 </ion-row>
 
                 <ion-row class="pt-16">
@@ -19,30 +18,27 @@
                 </ion-row>
                 <ion-row>
                     <ion-col size="10"><h1 class="text-white text-left text-sm"> {{ player.currentSong.artist }} </h1></ion-col>
-                    <ion-col size="2"><img class ="w-2/3" src="/images/icons/icon3.png" style="filter:invert(1)" /></ion-col>
                 </ion-row>
                 <ion-row>
                     <ion-range v-model.number="range" :min="0" :max="100"></ion-range>
                 </ion-row>
                 <ion-row>
-                    <ion-col size="2" class="flex justify-center items-center"><img  class = "w-1/2" src="/images/icons/shuffle.png" style="filter: invert(1)" /></ion-col>
-                    <ion-col size="2" class="flex justify-center items-center">
+                    <ion-col size="3" class="flex justify-center items-center">
                         <ion-button fill="clear" @click="prevSong">
                             <SkipBackward class="text-white" :size="30" />
                         </ion-button>
                     </ion-col>
-                    <ion-col size="4" class="flex justify-center items-center">
+                    <ion-col size="6" class="flex justify-center items-center">
                         <ion-button fill="clear" @click="togglePlay">
                             <Play class="text-white" v-if="!player.isPlaying" :size="40" />
                             <Pause class="text-white" v-if="player.isPlaying" :size="40" />
                         </ion-button>
                     </ion-col>
-                    <ion-col size="2" class="flex justify-center items-center">
+                    <ion-col size="3" class="flex justify-center items-center">
                         <ion-button fill="clear" @click="nextSong">
                             <SkipForward class="text-white" :size="30" />
                         </ion-button>
                     </ion-col>
-                    <ion-col size="2" class="flex justify-center items-center"><img  class = "w-1/2" src="/images/icons/replay.png" style="filter: invert(1)" /></ion-col>
                 </ion-row>
             </ion-grid>
             <ion-grid v-else>

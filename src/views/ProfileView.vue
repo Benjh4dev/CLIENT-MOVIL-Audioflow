@@ -20,13 +20,13 @@
             </div>
             <ion-list class="bg-[#212121]">
                 <li v-for="number in 50" :key="number">
-                    <SongRow></SongRow>
+                    <SongRow v-for="song in mainStore.systemSongs" :song="song" :key="song.id"></SongRow>
                 </li>
                 
             </ion-list>
         </ion-content>
         <ion-footer class="shadow-none">
-            <MusicPlayer></MusicPlayer>
+            <MusicPlayer :song ="playerStore.currentSong"></MusicPlayer>
         </ion-footer>
     </ion-page>
 </template>
@@ -43,5 +43,13 @@ import { IonContent } from '@ionic/vue';
 import TopBar from '@/components/TopBar.vue';
 import SongRow from '@/components/SongRow.vue';
 import MusicPlayer from '@/components/MusicPlayer.vue';
+
+import { fetchSongs } from '../api';
+import { onMounted, ref } from 'vue';
+import { useMainStore } from '@/stores/main';
+import { usePlayerStore } from '@/stores/player';
+
+const mainStore = useMainStore();
+const playerStore = usePlayerStore();
 
 </script>
