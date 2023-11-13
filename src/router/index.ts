@@ -16,12 +16,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/register',
     component: RegisterView,
-    meta: { requiresAuth: false },
   },
   {
     path: '/login',
     component: LoginView,
-    meta: { requiresAuth: false },
   },
   {
     path: '/song',
@@ -30,7 +28,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/profile',
     component: ProfileViewVue,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true},
   },
 ]
 
@@ -47,7 +45,12 @@ router.beforeEach((to, from, next) => {
     next('/');
     console.log('No autenticado');
     return;
-  } else {
+  } else if ((to.path === '/login' || to.path === '/register') && mainStore.$state.token) {
+    next('/');
+    console.log('Autenticado, no puede acceder');
+    return;
+  }
+  else {
     console.log('Autenticado');
     next();
   }

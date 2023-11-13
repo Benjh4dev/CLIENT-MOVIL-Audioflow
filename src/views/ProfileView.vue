@@ -1,15 +1,23 @@
 <template>
     <ion-page>
         <ion-header>
-            <TopBar></TopBar>
+            <TopBar></TopBar>            
+            <div class="absolute inset-0 flex justify-center items-center">
+                    <button @click="logout" class="text-white py-2 px-4 rounded-3xl border-solid border border-white text-sm">
+                        Cerrar sesión
+                    </button>
+            </div>
         </ion-header>
         <ion-content>
             <div class="bg-[#212121] py-5">
                 <div class="flex space-x-5 mx-5">
-                    <img src="/images/icons/guest-pic.png" class=" h-[70px] w-[70px]">
-                    <div class="self-center">
-                        <h1 class="font-bold text-2xl">Nombre Apellido</h1>
-                        <h1>username@gmail.com</h1>
+                    <div>
+                        <img src="/images/icons/guest-pic.png" class=" h-[70px] w-[70px]">            
+                    </div>
+
+                    <div class="text-white self-center">
+                        <h1 class="text-white font-bold text-2xl"> {{ mainStore.user?.username }}</h1>
+                        <h1>{{ mainStore.user?.email }}</h1>
                     </div>
                 </div>
 
@@ -20,13 +28,13 @@
             </div>
             <ion-list class="bg-[#212121]">
                 <li v-for="number in 50" :key="number">
-                    <SongRow></SongRow>
+                    <SongRow v-for="song in mainStore.systemSongs" :song="song" :key="song.id"></SongRow>
                 </li>
                 
             </ion-list>
         </ion-content>
         <ion-footer class="shadow-none">
-            <MusicPlayer></MusicPlayer>
+            <MusicPlayer v-if="playerStore.currentSong" :song ="playerStore.currentSong"></MusicPlayer>
         </ion-footer>
     </ion-page>
 </template>
@@ -43,5 +51,21 @@ import { IonContent } from '@ionic/vue';
 import TopBar from '@/components/TopBar.vue';
 import SongRow from '@/components/SongRow.vue';
 import MusicPlayer from '@/components/MusicPlayer.vue';
+
+import { fetchSongs } from '../api';
+import { onMounted, ref } from 'vue';
+import { useMainStore } from '@/stores/main';
+import { usePlayerStore } from '@/stores/player';
+import { useRouter } from 'vue-router';
+
+const mainStore = useMainStore();
+const playerStore = usePlayerStore();
+
+const router = useRouter();
+
+const logout = () => {
+    mainStore.logoutUser();
+    router.push('/login'); 
+};
 
 </script>

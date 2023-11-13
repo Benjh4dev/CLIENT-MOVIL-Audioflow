@@ -76,12 +76,14 @@
           </ion-row>
           <ion-row responsive-sm class="ion-padding">
             <ion-col>
-              <ion-button 
-                  class="w-4/5 mx-auto font-bold text-white border-white border-4 rounded-2xl"
-                  type="submit" 
-                  expand="block" 
-                  fill="outline"
+              <router-link to="/login">
+                <ion-button 
+                    class="w-4/5 mx-auto font-bold text-white border-white border-4 rounded-2xl"
+                    type="submit" 
+                    expand="block" 
+                    fill="outline"
                 >Registrarse</ion-button>
+              </router-link>
                 <p class="pt-2 text-white text-base text-center">¿Ya tienes cuenta? <router-link to ="/login" class="underline font-[bold];">Ingresa aquí</router-link></p>
             </ion-col>
           </ion-row>

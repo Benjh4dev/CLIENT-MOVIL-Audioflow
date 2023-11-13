@@ -35,7 +35,7 @@
     
 
     import { Song } from '../interfaces';
-
+    
     const props = defineProps({
         song: {
             type: Object as () => Song,
