@@ -1,4 +1,5 @@
 <template>
+    <SongRow v-if="song" :song="song"></SongRow>
     <div @click="playSong" class="text-white flex h-[70px] items-center">
         <img :src="props.song.coverURL"
             class="h-[50px] w-[50px] ml-5 rounded-md">
@@ -10,6 +11,7 @@
             <h2>{{ props.song.duration }}</h2>
         </div>
     </div>
+    
 </template>
 
 <script setup lang="ts">
@@ -17,6 +19,7 @@
 import { Song } from '../interfaces';
 import { usePlayerStore } from '@/stores/player';
 const playerStore = usePlayerStore();
+
 
 const props = defineProps({
     song: {

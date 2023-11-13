@@ -29,6 +29,8 @@ export const useMainStore = defineStore({
                 this.user = null;
                 this.token = "";
                 this.mySongs = [];
+                this.$reset();
+                localStorage.clear();
                 router.push('/');
                 window.location.reload();
         },

@@ -2,6 +2,11 @@
     <ion-page>
         <ion-header>
             <TopBar></TopBar>
+            <div class="absolute top-0 right-0 m-4">
+                <button @click="logout" class="text-white py-2 px-4 rounded-3xl border-solid border border-white text-sm">
+                    Cerrar sesión
+                </button>
+            </div>
         </ion-header>
         <ion-content>
             <div class="bg-[#212121] py-5">
@@ -20,13 +25,13 @@
             </div>
             <ion-list class="bg-[#212121]">
                 <li v-for="number in 50" :key="number">
-                    <SongRow></SongRow>
+                    <SongRow v-for="song in mainStore.systemSongs" :song="song" :key="song.id"></SongRow>
                 </li>
-                
+
             </ion-list>
         </ion-content>
         <ion-footer class="shadow-none">
-            <MusicPlayer></MusicPlayer>
+            <MusicPlayer v-if="playerStore.currentSong" :song="playerStore.currentSong"></MusicPlayer>
         </ion-footer>
     </ion-page>
 </template>
@@ -43,5 +48,22 @@ import { IonContent } from '@ionic/vue';
 import TopBar from '@/components/TopBar.vue';
 import SongRow from '@/components/SongRow.vue';
 import MusicPlayer from '@/components/MusicPlayer.vue';
+import { Song } from '@/interfaces';
+import { useRouter } from 'vue-router';
+
+import { fetchSongs } from '../api';
+import { onMounted, ref } from 'vue';
+import { useMainStore } from '@/stores/main';
+import { usePlayerStore } from '@/stores/player';
+
+const mainStore = useMainStore();
+const playerStore = usePlayerStore();
+
+const router = useRouter();
+
+const logout = () => {
+    mainStore.logoutUser();
+    router.push('/login'); 
+};
 
 </script>
