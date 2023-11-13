@@ -14,7 +14,7 @@
             </ion-list>
         </ion-content>
         <ion-footer class="shadow-none">
-            <MusicPlayer v-if="playerStore.currentSong"  :song ="playerStore.currentSong"></MusicPlayer>
+            <MusicPlayer :song ="playerStore.currentSong || mainStore.systemSongs[0]"></MusicPlayer>
         </ion-footer>
     </ion-page>
 </template>
