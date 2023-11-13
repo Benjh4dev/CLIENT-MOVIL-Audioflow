@@ -32,7 +32,6 @@ const routes: Array<RouteRecordRaw> = [
     component: ProfileViewVue,
     meta: { requiresAuth: true },
   },
-  }
 ]
 
 const router = createRouter({
