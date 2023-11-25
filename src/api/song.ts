@@ -25,7 +25,7 @@ export async function fetchUserSongs() {
     console.log("Usando fetchUserSongs")
     mainStore.verifyTokenValidity();
     console.log("mainStore.$state.user?.id",mainStore.$state.user?.id);
-    const response = await api.get(`/song/${mainStore.$state.user?.id/}`, {
+    const response = await api.get(`/song/${mainStore.$state.user?.id}/`, {
         headers: {
         'Authorization': `Bearer ${mainStore.$state.token}`,
         }
