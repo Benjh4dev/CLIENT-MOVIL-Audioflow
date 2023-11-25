@@ -31,7 +31,8 @@ import TopBar from '@/components/TopBar.vue';
 import SongRow from '@/components/SongRow.vue';
 import MusicPlayer from '@/components/MusicPlayer.vue';
 
-import { fetchSongs } from '../api';
+import { fetchSongs, fetchUserSongs } from '../api';
+import {fetchUserPlaylists} from '../api/playlist';
 import { onMounted, ref } from 'vue';
 import { useMainStore } from '@/stores/main';
 import { usePlayerStore } from '@/stores/player';
@@ -54,6 +55,28 @@ const getSongs = async () => {
         if(playerStore.currentSong === null) {
             playerStore.playSong(mainStore.systemSongs[0]);
         }
+        isFetching.value = true;
+    } catch (error) {
+    console.error('Hubo un error al hacer fetch:', error);
+    }
+};
+const getUserSongs = async () => {
+    try {
+        console.log("Intentando conseguir canciones usuario")
+        const response = await fetchUserSongs();
+        isFetching.value = false;
+        mainStore.loadMySongs(response.songs)
+        
+    } catch (error) {
+    console.error('El usuario no tiene canciones', error);
+    }
+};
+
+const getPlaylist = async () => {
+    try {
+        const response = await fetchUserPlaylists();
+        isFetching.value = false;
+        mainStore.loadPlaylists(response.songs)
         console.log(response);
     } catch (error) {
     console.error('Hubo un error al hacer fetch:', error);
@@ -63,6 +86,8 @@ const getSongs = async () => {
 onMounted(async () => {
     mainStore.clearSystemSongs();
     getSongs();
+    getUserSongs();
+    getPlaylist()
 });
 
 </script>

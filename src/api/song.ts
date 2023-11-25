@@ -22,9 +22,10 @@ export async function fetchSongs(searchQuery: string) {
 
 export async function fetchUserSongs() {
     const mainStore = useMainStore();
+    console.log("Usando fetchUserSongs")
     mainStore.verifyTokenValidity();
-    
-    const response = await api.get(`/song/${mainStore.$state.user?.id}`, {
+    console.log("mainStore.$state.user?.id",mainStore.$state.user?.id);
+    const response = await api.get(`/song/${mainStore.$state.user?.id/}`, {
         headers: {
         'Authorization': `Bearer ${mainStore.$state.token}`,
         }

@@ -1,15 +1,9 @@
 <template>
     <ion-page>
-        <ion-header>
+        <ion-header class="bg-[#212121]">
             <TopBar></TopBar>            
-            <div class="absolute inset-0 flex justify-center items-center">
-                    <button @click="logout" class="text-white py-2 px-4 rounded-3xl border-solid border border-white text-sm">
-                        Cerrar sesión
-                    </button>
-            </div>
-        </ion-header>
-        <ion-content>
-            <div class="bg-[#212121] py-5">
+            
+            <div class="bg-[#212121] py-5 m">
                 <div class="flex space-x-5 mx-5">
                     <div>
                         <img src="/images/icons/guest-pic.png" class=" h-[70px] w-[70px]">            
@@ -26,6 +20,9 @@
                     <button class="text-white py-2 rounded-3xl w-[120px] border-solid border border-white text-sm"> Mis playlist</button>
                 </div>
             </div>
+        </ion-header>
+        <ion-content>
+            
             <ion-list class="bg-[#212121]">
                 <li v-for="number in 50" :key="number">
                     <SongRow v-for="song in mainStore.systemSongs" :song="song" :key="song.id"></SongRow>
@@ -62,6 +59,7 @@ const mainStore = useMainStore();
 const playerStore = usePlayerStore();
 
 const router = useRouter();
+
 
 const logout = () => {
     mainStore.logoutUser();
