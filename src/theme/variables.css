@@ -1,6 +1,10 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
 
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
@@ -234,7 +238,3 @@ http://ionicframework.com/docs/theming/ */
     --ion-card-background: #1e1e1e;
   }
 }
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
