@@ -1,10 +1,11 @@
 import { Song } from './song';
 
 export interface Player {
+    id: string;
+    user_id: string;
     currentSong: Song | null;
-    lastPlayed: Song[];
     queue: Song[];
-    isPlaying: boolean;
     currentTime: number;
     volume: number;
+    isPlaying: boolean;
 };

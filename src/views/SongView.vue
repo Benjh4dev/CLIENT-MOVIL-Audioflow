@@ -52,7 +52,7 @@
     </ion-page>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar, IonImg, IonRange, IonGrid, IonRow, IonCol} from '@ionic/vue';
 import { playCircleOutline, pauseCircleOutline} from 'ionicons/icons';
 import Play from 'vue-material-design-icons/Play.vue';
@@ -61,131 +61,126 @@ import SkipBackward from 'vue-material-design-icons/SkipBackward.vue';
 import SkipForward from 'vue-material-design-icons/SkipForward.vue';
 import { ref, watch, computed, onMounted, nextTick } from 'vue';
 
+import MusicPlayerVolume from '@/components/MusicPlayerVolume.vue'
+
 import { usePlayerStore } from '@/stores/player';
+import { useMainStore } from '@/stores/main';
 
-export default {
-    name: 'SongView',
-    components: {
-        SkipBackward,
-        SkipForward,
-        Play,
-        Pause,
-        IonButton,
-        IonContent,
-        IonHeader,
-        IonIcon,
-        IonPage,
-        IonTitle,
-        IonToolbar,
-        IonImg,
-        IonRange,
-        IonGrid,
-        IonRow, 
-        IonCol,
-    },
-    setup() {
-        const player = usePlayerStore();
-        let audio = ref(new Audio(player.currentSong?.audioURL));
-        let isHover = ref(false);
-        let range = ref(0);
+const mainStore = useMainStore();
+const playerStore = usePlayerStore();
+const player = playerStore.player;
+
+let audio = ref(new Audio(player.currentSong?.audioURL));
+let isHover = ref(false);
+let range = ref(0);
+
+onMounted(async () => {
+    await nextTick();
+    audio.value.volume = player.volume / 100;
+    audio.value.onloadedmetadata = () => {
+        if (audio.value.duration) {
+            range.value = (player.currentTime / audio.value.duration) * 100;
+        }
+    };
+});
+
+watch(() => player.volume, (newVolume) => {
+    audio.value.volume = newVolume / 100;
+});
+
+watch(() => player.currentTime, (newCurrentTime) => {
+    console.log('asd')
+    audio.value.onended = handleSongEnd;
+    range.value = newCurrentTime / audio.value.duration * 100;
+});
+
+watch(() => player.currentSong, (newSong) => {
+    if (newSong) {
+        audio.value.pause();
+        player.isPlaying = false;
+        audio.value.src = newSong.audioURL;
+        audio.value.load();
+        audio.value.onended = handleSongEnd;
+        if(player.currentTime != 0) {
+            range.value = playerStore.player.currentTime / audio.value.duration * 100;
+            audio.value.currentTime = playerStore.player.currentTime;
+            return;
+        }
+        togglePlay();
+    };
+});
+
+audio.value.ontimeupdate = () => {
+    playerStore.updateCurrentTime(audio.value.currentTime);
+    range.value = (audio.value.currentTime / audio.value.duration) * 100;
+};
+
+const updateAudioTime = () => {
+    if (audio.value.duration) {
+        const newTime = (range.value / 100) * audio.value.duration;
+        audio.value.currentTime = newTime;
+        playerStore.updateCurrentTime(newTime);
+    };
+};
+
+
+const togglePlay = async () => {
+    if (player.isPlaying) {
+        audio.value.pause();
         
-        onMounted(async () => {
-            await nextTick();
-            audio.value.volume = player.volume / 100;
-            audio.value.onloadedmetadata = () => {
-                if (audio.value.duration) {
-                    range.value = (player.currentTime / audio.value.duration) * 100;
-                }
-            };
-        });
-
-        watch(() => player.volume, (newVolume) => {
-            audio.value.volume = newVolume / 100;
-        });
-
-        watch(() => player.currentSong, (newSong, oldSong) => {
-            if (newSong) {
-                audio.value.pause();
-                player.isPlaying = false;
-                audio.value.src = newSong.audioURL;
-                audio.value.load();
-                audio.value.onended = handleSongEnd;
-                togglePlay();
-            }
-        });
-
-        audio.value.ontimeupdate = () => {
-            player.updateCurrentTime(audio.value.currentTime);
-            range.value = (audio.value.currentTime / audio.value.duration) * 100;
+    } else {
+        try {
+            audio.value.play();
+            audio.value.currentTime = player.currentTime;
+        } catch (error) {
+            console.error("Error al reproducir el audio:", error);
         };
+    };
+    player.isPlaying = !player.isPlaying;
+};
 
-        const updateAudioTime = () => {
-            if (audio.value.duration) {
-                const newTime = (range.value / 100) * audio.value.duration;
-                audio.value.currentTime = newTime;
-                player.updateCurrentTime(newTime);
-            }
-        };
+const nextSong = () => {
+    if(mainStore.user && player.queue.length > 0) {
+        let nextSong = player.queue[0];
 
-        const handleSongEnd = () => {
-            if (player.queue.length === 0) {
-                player.isPlaying = false;
-            } else {
-                player.nextSong();
-            }
-        };
-
-        const togglePlay = async () => {
-            if (player.isPlaying) {
-                audio.value.pause();
-            } else {
-                try {
-                    await audio.value.play();
-                    audio.value.currentTime = player.currentTime;
-                } catch (error) {
-                    console.error("Error al reproducir el audio:", error);
-                }
-            }
-            player.isPlaying = !player.isPlaying;
-        }
-
-        const nextSong = () => {
-            player.nextSong();
-        }
-
-        const prevSong = () => {
-            player.prevSong();
-        }
-
-        const formatTime = (seconds: number) => {
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${mins}:${secs.toString().padStart(2, '0')}`;
-        }
-
-        const formattedCurrentTime = computed(() => formatTime(player.currentTime));
-        const formattedDuration = computed(() => player.currentSong ? formatTime(player.currentSong.duration) : '0:00');
-
-        return {
-            SkipBackward,
-            SkipForward,
-            Play,
-            Pause,
-            player,
-            pauseCircleOutline,
-            playCircleOutline,
-            togglePlay,
-            nextSong,
-            prevSong,
-            range,
-            updateAudioTime,
-            formattedCurrentTime,
-            formattedDuration
-        }
     }
-}
+    playerStore.nextSong();
+};
 
+const prevSong = () => {
+    if(playerStore.lastPlayed.length === 0) {
+        audio.value.currentTime = 0;
+        if(mainStore.user) {
 
+        }
+        return;
+    }
+
+    if(mainStore.user && playerStore.lastPlayed.length > 0) {
+        let nextSong = playerStore.lastPlayed[0];
+    }
+    playerStore.prevSong();
+};
+
+const handleSongEnd = () => {
+    if (player.queue.length === 0) {
+        player.isPlaying = false;
+        if(mainStore.user) {
+
+        }
+    } else {
+        nextSong();
+    };
+};
+
+const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
+
+const formattedCurrentTime = computed(() => formatTime(player.currentTime));
+const formattedDuration = computed(() => player.currentSong ? formatTime(player.currentSong.duration) : '0:00');
 </script>
 
 <style scoped>
@@ -202,12 +197,10 @@ ion-range {
     --knob-size: 20px;
     --pin-background: #ffffff;
     --pin-color: #ffffff;
-
 }
 
 ion-icon {
   font-size: 64px;
   color:#ffffff;
 }
-
 </style>
