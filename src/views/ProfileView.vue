@@ -6,7 +6,7 @@
             <div class="bg-[#212121] py-5 m">
                 <div class="flex space-x-5 mx-5">
                     <div>
-                        <img src="/images/icons/guest-pic.png" class=" h-[70px] w-[70px]">            
+                        <img :src="mainStore.user?.picture_url" class="rounded-full h-[70px] w-[70px]">            
                     </div>
 
                     <div class="text-white self-center">
@@ -50,7 +50,7 @@ import SongRow from '@/components/SongRow.vue';
 import MusicPlayer from '@/components/MusicPlayer.vue';
 
 import { fetchSongs } from '../api';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useMainStore } from '@/stores/main';
 import { usePlayerStore } from '@/stores/player';
 import { useRouter } from 'vue-router';
@@ -60,6 +60,9 @@ const playerStore = usePlayerStore();
 
 const router = useRouter();
 
+const userImage = computed(() => {
+    return mainStore.user?.picture_url || '/images/icons/user.png';
+});
 
 const logout = () => {
     mainStore.logoutUser();

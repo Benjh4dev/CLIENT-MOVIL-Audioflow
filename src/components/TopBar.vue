@@ -17,7 +17,7 @@
             </div>
         <router-link to="/profile">
             <button class="h-[45px] w-[45px] ml-auto mr-5">
-                <img src="/images/icons/guest-pic.png" class=" h-[45px] w-[45px]">
+                <img :src="userImage" class="rounded-full h-[45px] w-[55px]">
             </button>    
         </router-link>
     </div>
@@ -39,5 +39,13 @@ const logout = () => {
     mainStore.logoutUser();
     router.push('/login'); 
 };
+
+const userImage = computed(() => {
+    if(typeof mainStore.user?.picture_url !== 'undefined') {
+        return mainStore.user?.picture_url;
+    } else {
+        return '/images/icons/guest-pic.png';
+    }
+});
 </script>
 ```
