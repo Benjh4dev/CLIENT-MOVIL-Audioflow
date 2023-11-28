@@ -1,29 +1,29 @@
 <template>
     <div class="bg-green-700 flex justify-between h-[85px]">
-        <div class="flex">
             <router-link to ="/song">
-            <div class="flex items-center m-2">
-                <img class="rounded-lg shadow-2xl" :src="player.currentSong?.coverURL" width="70" alt="Portada del álbum">
-                <div class="ml-3 md:opacity-100 group transition-all duration-300 ease-in-out">
-                <div class="text-[14px] text-white hover:underline cursor-pointer">
-                    {{player.currentSong?.name}}
+                <div class="flex">
+                    <div class="flex items-center m-2 w-[80vw]">
+                        <img class="rounded-lg shadow-2xl" :src="player.currentSong?.coverURL" width="70" alt="Portada del álbum">
+                        <div class="ml-3 md:opacity-100 group transition-all duration-300 ease-in-out">
+                            <div class="text-[14px] text-white hover:underline cursor-pointer">
+                                {{player.currentSong?.name}}
+                            </div>
+                            <div class="text-[11px] text-gray-300 font-semibold hover:underline hover:text-white cursor-pointer truncate">
+                                {{player.currentSong?.artist}}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="text-[11px] text-gray-400 font-semibold hover:underline hover:text-white cursor-pointer truncate">
-                    {{player.currentSong?.artist}}
-                </div>
-                </div>
-            </div>
             </router-link>
-        </div>
-        <div class="flex justify-center items-center pr-8">
-            <div >
-                <button @click="togglePlay">
-                    <Play class="text-white" v-if="!player.isPlaying" :size="45" />
-                    <Pause class="text-white" v-if="player.isPlaying" :size="45" />
-                </button>
+            <div class="flex justify-center items-center pr-8">
+                <div >
+                    <button @click="togglePlay">
+                        <Play class="text-white" v-if="!player.isPlaying" :size="45" />
+                        <Pause class="text-white" v-if="player.isPlaying" :size="45" />
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 </template>
   
 <script setup lang="ts">

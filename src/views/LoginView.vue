@@ -73,18 +73,21 @@
 <script setup lang="ts">
 import { IonContent, IonPage, IonImg, IonRow, IonInput, IonButton, IonCol, IonLabel } from '@ionic/vue';
 import { ref } from 'vue';
-import apiClient from '@/services/api';
 import { useRouter } from 'vue-router';
 import { useMainStore } from '@/stores/main';
+import { usePlayerStore } from '@/stores/player';
+
+import { fetchUserPlaylists, login } from '@/api';
+
+import apiClient from '@/services/api';
+import { LoginForm } from '@/interfaces';
+
+const mainStore = useMainStore();
+const playerStore = usePlayerStore();
 
 const errors = ref<string>(''); 
 
-interface FormData {
-  email: string;
-  password: string;
-}
-
-const formData = ref<FormData>({
+const formData = ref<LoginForm>({
   email: '',
   password: '',
 });
@@ -93,38 +96,33 @@ const router = useRouter();
 
 async function loginUser(): Promise<void> {
   errors.value = '';
+
   try {
-    const response = await apiClient.post('/auth', formData.value);
-    console.log(response);
-    if (response.status == 200) {
-      useMainStore().loginUser(response.data);
-      router.push('/');
-    }
+    const user = await login(formData.value);
+
+    mainStore.loginUser(user);
+
+    // user.player.queue = await loadQueue(user.player.id); //AGREGAR FIRESTORE PARA GUARDAR Y CARGAR DATOS DEL MUSICPLAYER
+    playerStore.storePlayer(user.player);
+
+    const userPlaylists = await fetchUserPlaylists();
+    mainStore.loadMyPlaylists(userPlaylists);
+    router.push('/');
     
   } catch (error: any) {    
       if (error.response) {
         if (error.response.status == 400) {
-
           errors.value = 'Ingrese los campos correctamente';
-          console.log(errors.value); 
           return;
         }
         else if (error.response.status == 401) {
           errors.value = error.response.data.message;
-          console.log(errors.value); 
           return;
         }
       } 
       errors.value = "Hubo un error, inténtelo más tarde";
-    console.log(errors.value);
     }
   }
-  
-  
-  
-  
-
-
 </script>
 
 <style scoped>
@@ -138,4 +136,3 @@ async function loginUser(): Promise<void> {
   --ion-background-color: linear-gradient(90deg,#8c52ff,#00bf63);
 }
 </style>
-```

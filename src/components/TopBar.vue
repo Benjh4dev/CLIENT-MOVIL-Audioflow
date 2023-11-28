@@ -11,9 +11,9 @@
             </button>
         </router-link>
             <div v-if="isVisible">
-                    <button @click="logout" class="text-white py-2 px-4 rounded-3xl border-solid border border-white text-sm">
-                        Cerrar sesión
-                    </button>
+                <button @click="logout" class="text-white py-2 px-4 rounded-3xl border-solid border border-white text-sm">
+                    Cerrar sesión
+                </button>
             </div>
         <router-link to="/profile">
             <button class="h-[45px] w-[45px] ml-auto mr-5">
@@ -25,27 +25,31 @@
 
 <script setup lang="ts">   
 import { useMainStore } from '@/stores/main';
+import { usePlayerStore } from '@/stores/player';
+
 import { useRouter } from 'vue-router';
 import { computed } from 'vue';
+
+const router = useRouter();
 const mainStore = useMainStore();
+const playerStore = usePlayerStore();
 
 const isVisible = computed(() => {
-    console.log(router.currentRoute.value.path);
     return router.currentRoute.value.path === '/profile';
 })
 
-const router = useRouter();
 const logout = () => {
+    playerStore.destorePlayer();
     mainStore.logoutUser();
     router.push('/login'); 
 };
 
 const userImage = computed(() => {
-    if(typeof mainStore.user?.picture_url !== 'undefined') {
+    if(mainStore.user === null) return '/images/icons/guest-pic.png';
+    if(mainStore.user?.picture_url != '') {
         return mainStore.user?.picture_url;
     } else {
         return '/images/icons/guest-pic.png';
     }
 });
 </script>
-```

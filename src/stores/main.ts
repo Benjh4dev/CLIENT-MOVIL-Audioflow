@@ -10,14 +10,16 @@ export const useMainStore = defineStore({
         user: User | null;
         token: string;
         mySongs: Song[];
-        systemSongs: Song[];
         myPlaylists: Playlist[];
+        systemSongs: Song[];
+        systemPlaylists: Playlist[];
     } => ({
         user: null,
         token: "",
         mySongs: [],
-        systemSongs: [],
         myPlaylists: [],
+        systemSongs: [],
+        systemPlaylists: [],
     }),
 
     actions: {
@@ -28,12 +30,11 @@ export const useMainStore = defineStore({
         },
 
         logoutUser() {
-                this.user = null;
-                this.token = "";
-                this.mySongs = [];
-                this.myPlaylists = [];
-                router.push('/');
-                window.location.reload();
+            this.user = null;
+            this.token = "";
+            this.mySongs = [];
+            this.myPlaylists = [];
+            router.push('/');
         },
         verifyTokenValidity() {
             if (!this.token) {
@@ -52,7 +53,6 @@ export const useMainStore = defineStore({
         },
         
         loadMySongs(songs: Song[]) {
-            console.log("ayudaaa", songs);
             this.mySongs = songs;
         },
         loadSongs(songs: Song[]) {
@@ -72,8 +72,11 @@ export const useMainStore = defineStore({
             this.systemSongs = this.systemSongs.filter(s => s.id !== song.id);
             this.mySongs = this.mySongs.filter(s => s.id !== song.id);
         },
-        loadPlaylists(playlists: Playlist[]) {
+        loadMyPlaylists(playlists: Playlist[]) {
             this.myPlaylists = playlists;
+        },
+        loadSystemPlaylists(playlists: Playlist[]) {
+            this.systemPlaylists = playlists;
         },
         clearMyPlaylists() {
             this.myPlaylists = [];

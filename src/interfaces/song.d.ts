@@ -6,4 +6,4 @@ export interface Song {
     duration: number;
     coverURL: string;
     audioURL: string;
-}
+};

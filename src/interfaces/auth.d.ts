@@ -19,4 +19,4 @@ export interface StoreUser {
 export interface DecodedToken {
     exp: number;
     [key: string]: any;
-}
+};

@@ -107,7 +107,6 @@ watch(() => player.volume, (newVolume) => {
 });
 
 watch(() => player.currentTime, (newCurrentTime) => {
-    console.log(newCurrentTime);
     audio.value.onended = handleSongEnd;
     range.value = newCurrentTime / audio.value.duration * 100;
 });
@@ -134,7 +133,6 @@ audio.value.ontimeupdate = () => {
 };
 
 const updateAudioTime = () => {
-    console.log(range);
     if (audio.value.duration) {
         const newTime = (range.value / 100) * audio.value.duration;
         audio.value.currentTime = newTime;
