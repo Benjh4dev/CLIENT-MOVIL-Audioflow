@@ -3,7 +3,7 @@
         <ion-header class="shadow-none">
             <TopBar></TopBar>
         </ion-header>
-        <ion-content>
+        <ion-content style="--background: #212121">
             <ion-list class="bg-[#212121]">
                 <h1 class="text-white text-2xl ml-5 mb-3 font-bold">
                     Recomendaciones
@@ -19,16 +19,17 @@
 
 
 <script setup lang="ts">
-import { IonPage, IonHeader, IonFooter, IonList, IonContent } from '@ionic/vue';
+import { IonPage, IonHeader, IonFooter, IonList, IonContent, IonRouterOutlet } from '@ionic/vue';
 
 import TopBar from '@/components/TopBar.vue';
 import SongRow from '@/components/SongRow.vue';
 import MusicPlayer from '@/components/MusicPlayer.vue';
 
 import { fetchSongs } from '../api';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref} from 'vue';
 import { useMainStore } from '@/stores/main';
 import { usePlayerStore } from '@/stores/player';
+import { storeToRefs } from 'pinia';
 
 const mainStore = useMainStore();
 const playerStore = usePlayerStore();

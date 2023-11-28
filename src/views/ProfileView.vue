@@ -1,5 +1,5 @@
 <template>
-    <ion-page>
+    <ion-page class="bg-[#212121]">
         <ion-header class="bg-[#212121]">
             <TopBar></TopBar>            
             
@@ -25,8 +25,8 @@
                 </div>
             </div>
         </ion-header>
-        <ion-content>
-            <ion-list class="bg-[#212121]">
+        <ion-content style="--background: #212121">
+            <ion-list class="bg-[#212121]" >
                 <div v-if="showMySongs" >
                     <h1 class="text-white text-2xl ml-5 mb-3 font-bold">
                         Tus canciones
@@ -37,7 +37,7 @@
                     <h1 class="text-white text-2xl ml-5 mb-3 font-bold">
                         Tus playlists
                     </h1>
-                    <PlaylistRow v-for="playlist in mainStore.myPlaylists" :playlist="playlist" :key="playlist.id"></PlaylistRow>
+                    <PlaylistRow v-for="playlist in mainStore.myPlaylists" :playlist="playlist" :key="playlist.id" ></PlaylistRow>
                 </div>
             </ion-list>
         </ion-content>

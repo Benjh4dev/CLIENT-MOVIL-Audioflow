@@ -1,5 +1,5 @@
 <template>
-    <div class="text-white flex h-[70px] items-center">
+    <div @click="SelectPlaylist" class=" text-white flex h-[70px] items-center active:bg-blue-500">
         <img :src="props.playlist.image"
             class="h-[50px] w-[50px] ml-5 rounded-md">
         <div class="ml-3">
@@ -12,8 +12,19 @@
 <script setup lang="ts">
 import { Playlist } from '../interfaces';
 import { usePlayerStore } from '@/stores/player';
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 
 const playerStore = usePlayerStore();
+const router = useRouter();
+
+const playlistLenght = computed(() => {
+    if(typeof props.playlist.songs.length !== 'undefined' ){
+        return 0;
+    } else {
+        return props.playlist.songs.length;
+    }
+});
 
 const props = defineProps({
     playlist: {
@@ -22,8 +33,9 @@ const props = defineProps({
     }
 });
 const SelectPlaylist = () => {
-    console.log('Reproduciendo canción');
+    router.push(`/`)
     
 };
+
 
 </script>
