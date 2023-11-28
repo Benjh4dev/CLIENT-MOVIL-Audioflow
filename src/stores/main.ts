@@ -52,7 +52,7 @@ export const useMainStore = defineStore({
         },
         
         loadMySongs(songs: Song[]) {
-            console.log("ayudaaa",songs);
+            console.log("ayudaaa", songs);
             this.mySongs = songs;
         },
         loadSongs(songs: Song[]) {

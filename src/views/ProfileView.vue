@@ -22,16 +22,12 @@
             </div>
         </ion-header>
         <ion-content>
-            
             <ion-list class="bg-[#212121]">
-                <li v-for="number in 50" :key="number">
-                    <SongRow v-for="song in mainStore.systemSongs" :song="song" :key="song.id"></SongRow>
-                </li>
-                
+                <SongRow v-for="song in mainStore.mySongs" :song="song" :key="song.id"></SongRow>
             </ion-list>
         </ion-content>
         <ion-footer class="shadow-none">
-            <MusicPlayer v-if="playerStore.currentSong" :song ="playerStore.currentSong"></MusicPlayer>
+            <MusicPlayer v-if="playerStore.player.currentSong" :song ="playerStore.player.currentSong"></MusicPlayer>
         </ion-footer>
     </ion-page>
 </template>
@@ -40,7 +36,6 @@
 
 <script setup lang="ts">
 import { IonPage } from '@ionic/vue';
-import { defineProps } from 'vue';
 import { IonHeader } from '@ionic/vue';
 import { IonFooter } from '@ionic/vue';
 import { IonList } from '@ionic/vue';
@@ -49,7 +44,7 @@ import TopBar from '@/components/TopBar.vue';
 import SongRow from '@/components/SongRow.vue';
 import MusicPlayer from '@/components/MusicPlayer.vue';
 
-import { fetchSongs } from '../api';
+import { fetchUserSongs } from '@/api';
 import { onMounted, ref, computed } from 'vue';
 import { useMainStore } from '@/stores/main';
 import { usePlayerStore } from '@/stores/player';
@@ -69,4 +64,17 @@ const logout = () => {
     router.push('/login'); 
 };
 
+const getUserSongs = async () => {
+    try {
+        const response = await fetchUserSongs();
+        mainStore.loadMySongs(response);
+        console.log(response)
+    } catch (error) {
+        console.error('Hubo un error al hacer fetch:', error);
+    }
+};
+
+onMounted(() => {
+    getUserSongs();
+});
 </script>

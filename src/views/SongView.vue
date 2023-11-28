@@ -1,15 +1,15 @@
 <template>
     <ion-page>
-        <ion-content class="ion-padding" fullscreen>
+        <ion-content class="ion-padding">
             <ion-grid v-if="player.currentSong">
-                <ion-row class="pt-16">
+                <ion-row>
                     <ion-col class ="flex justify-center items-center" size="2">
                     <router-link to="/" ><img  class = "w-1/2" src="/images/icons/chevron-down-outline.png" style="filter: invert(1)" /></router-link>
                     </ion-col>
                     <ion-col size="8"><h4 class="text-white text-center">Reproduciendo Canción</h4> </ion-col>
                 </ion-row>
 
-                <ion-row class="pt-16">
+                <ion-row class="pt-10">
                     <ion-col class="flex justify-center items-center"><ion-img :src ="player.currentSong.coverURL"  alt="Song Image" /></ion-col>
                 </ion-row>
 
@@ -65,13 +65,6 @@
                             <SkipForward class="text-white" :size="30" />
                         </ion-button>
                     </ion-col>
-                </ion-row>
-            </ion-grid>
-            <ion-grid v-else>
-                <ion-row class="pt-16">
-                    <ion-col class ="flex justify-center items-center" size="2"><img  class = "w-1/2" src="/images/icons/chevron-down-outline.png" style="filter: invert(1)" /></ion-col>
-                    <ion-col size="8"><h4 class="text-white text-center">Reproduciendo Canción</h4> </ion-col>
-                    <ion-col class ="flex justify-center items-center" size="2"><img class ="w-1/2" src="/images/icons/icon-2.png" style="filter:invert(1)" /></ion-col>
                 </ion-row>
             </ion-grid>
         </ion-content>
@@ -212,6 +205,8 @@ const formattedDuration = computed(() => player.currentSong ? formatTime(player.
 <style scoped>
 ion-content {
     --background: #000;
+    --overflow: hidden; /* Deshabilita el desplazamiento vertical */
+    height: 100vh; /* Asegura que ion-content ocupe toda la altura de la ventana */
 }
 
 ion-range {

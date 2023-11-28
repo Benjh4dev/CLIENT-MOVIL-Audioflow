@@ -1,4 +1,3 @@
-
 <template>
   <ion-page>
     <ion-content :fullscreen="true" class="container">
@@ -48,7 +47,7 @@
             <p v-if="errors" class="pt-3 pl-2 pb-1 text-sm text-start indent-8 text-[#ff0000] font-bold">{{ errors}}</p>
           </ion-row>
         </ion-row>
-        <ion-row responsive-sm class="ion-padding">
+        <ion-row responsive-sm>
           <ion-col>
             <ion-button
               class="w-4/5 mx-auto font-bold text-white border-white border-4 rounded-2xl"
@@ -56,12 +55,12 @@
               expand="block"
               fill="outline"
             >Iniciar Sesión</ion-button>
-            <p class="pt-2 text-white text-base text-center">¿No tienes cuenta? <router-link to="/register" class="underline font-bold">Regístrate aquí</router-link></p>
+            <p class="pt-4 text-white text-base text-center">¿No tienes cuenta? <router-link to="/register" class="underline font-bold">Regístrate aquí</router-link></p>
 
           </ion-col>
         </ion-row>
-        <ion-row responsive-sm class="ion-padding">
-            <ion-col style="margin-top: 12rem;"> 
+        <ion-row responsive-sm>
+            <ion-col> 
                 <router-link to="/" class="text-white underline font-bold block text-center">Ingresar como invitado</router-link>
             </ion-col>
         </ion-row>
@@ -130,6 +129,8 @@ async function loginUser(): Promise<void> {
 
 <style scoped>
 .container {
+  --overflow: hidden;
+  height: 100vh;
   position: absolute;
   left: 0;
   right: 0;

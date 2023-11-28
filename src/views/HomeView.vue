@@ -8,9 +8,7 @@
                 <h1 class="text-white text-2xl ml-5 mb-3 font-bold">
                     Recomendaciones
                 </h1>
-
                 <SongRow v-for="song in mainStore.systemSongs" :song="song" :key="song.id"></SongRow>
-                
             </ion-list>
         </ion-content>
         <ion-footer class="shadow-none">
