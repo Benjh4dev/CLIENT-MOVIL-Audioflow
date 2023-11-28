@@ -8,6 +8,7 @@ export const usePlayerStore = defineStore({
         player: Player;
         lastPlayed: Song[];
         subscribed: boolean;
+        audioPlayer: any,
     } => ({
         player: {
             id: '',
@@ -20,9 +21,13 @@ export const usePlayerStore = defineStore({
         },
         lastPlayed: [],
         subscribed: false,
+        audioPlayer: null,
     }),
 
     actions: {
+        setAudioPlayer(audio: any) {
+            this.audioPlayer = audio.value;
+        },
         storePlayer(player: Player) {
             const { id, currentTime, volume, user_id, currentSong, queue } = player;
             this.player.id = id;
@@ -32,7 +37,6 @@ export const usePlayerStore = defineStore({
             this.player.volume = volume;
             if(queue) this.player.queue = queue;
         },
-        
         destorePlayer() {
             this.player = {
                 id: '',
@@ -45,7 +49,6 @@ export const usePlayerStore = defineStore({
             };
             this.lastPlayed = [];
         },
-
         playSong(song: Song) {
             if (this.player.currentSong) {
                 if(this.player.currentSong.id == song.id) return;
@@ -58,11 +61,9 @@ export const usePlayerStore = defineStore({
             this.player.isPlaying = true;
             this.player.currentSong = song;
         },
-        
         addToQueue(song: Song) {
             this.player.queue.push(song);
         },
-
         nextSong() {
             if (this.player.queue.length > 0) {
                 this.player.currentTime = 0;
@@ -70,7 +71,6 @@ export const usePlayerStore = defineStore({
                 this.playSong(this.player.queue.shift()!);
             };
         },        
-
         prevSong() {
             if (this.lastPlayed.length > 0) {
                 if (this.player.currentSong) {
@@ -83,11 +83,9 @@ export const usePlayerStore = defineStore({
                 this.player.currentSong = previousSong;
             }
         },
-
         updateCurrentTime(time: number) {
             this.player.currentTime = time;
         },
-
         updateVolume(volume: number) {
             this.player.volume = volume;
         },

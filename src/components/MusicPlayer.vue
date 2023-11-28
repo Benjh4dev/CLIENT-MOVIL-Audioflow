@@ -1,81 +1,138 @@
 <template>
-    <div class="bg-green-700 flex justify-between">
-    <div class="flex">
-        <router-link to ="/song">
-        <div class="flex items-center ml-4 mt-2 mb-2">
-            <img class="rounded-lg shadow-2xl" :src="props.song.coverURL" width="70" alt="Portada del álbum">
-            <div class="ml-3 md:opacity-100 group transition-all duration-300 ease-in-out">
-            <div class="text-[14px] text-white hover:underline cursor-pointer">
-                {{props.song.name}}
+    <div class="bg-green-700 flex justify-between h-[85px]">
+        <div class="flex">
+            <router-link to ="/song">
+            <div class="flex items-center m-2">
+                <img class="rounded-lg shadow-2xl" :src="player.currentSong?.coverURL" width="70" alt="Portada del álbum">
+                <div class="ml-3 md:opacity-100 group transition-all duration-300 ease-in-out">
+                <div class="text-[14px] text-white hover:underline cursor-pointer">
+                    {{player.currentSong?.name}}
+                </div>
+                <div class="text-[11px] text-gray-400 font-semibold hover:underline hover:text-white cursor-pointer truncate">
+                    {{player.currentSong?.artist}}
+                </div>
+                </div>
             </div>
-            <div class="text-[11px] text-gray-400 font-semibold hover:underline hover:text-white cursor-pointer">
-                {{props.song.artist}}
+            </router-link>
+        </div>
+        <div class="flex justify-center items-center pr-8">
+            <div >
+                <button @click="togglePlay">
+                    <Play class="text-white" v-if="!player.isPlaying" :size="45" />
+                    <Pause class="text-white" v-if="player.isPlaying" :size="45" />
+                </button>
             </div>
-            </div>
         </div>
-        </router-link>
-    </div>
-    <div class="flex justify-center items-center pr-8">
-        <div class="pr-4" >
-            <button @click="prevSong">
-                <SkipBackward class="text-white" :size="40" />
-            </button>
-        </div>
-        <div >
-            <button @click="togglePlay">
-                <Play class="text-white" v-if="!player.isPlaying" :size="45" />
-                <Pause class="text-white" v-if="player.isPlaying" :size="45" />
-            </button>
-        </div>
-        <div class="pl-4">
-            <button @click="nextSong">
-                <SkipForward class="text-white" :size="40" />
-            </button>
-        </div>
-    </div>
     </div>
 </template>
   
 <script setup lang="ts">
-import { Song } from '../interfaces';
-import { usePlayerStore } from '@/stores/player';
-import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar, IonImg, IonRange, IonGrid, IonRow, IonCol} from '@ionic/vue';
-import SkipBackward from 'vue-material-design-icons/SkipBackward.vue';
-import SkipForward from 'vue-material-design-icons/SkipForward.vue';
+import { ref, watch, computed, onMounted, nextTick } from 'vue';
+
 import Play from 'vue-material-design-icons/Play.vue';
 import Pause from 'vue-material-design-icons/Pause.vue';
-import { ref } from 'vue';
 
-const props = defineProps({
-    song: {
-        type: Object as () => Song,
-        required: true
-    }
-});
+import { usePlayerStore } from '@/stores/player';
+import { useMainStore } from '@/stores/main';
+
+const mainStore = useMainStore();
 const playerStore = usePlayerStore();
 const player = playerStore.player;
-let audio = ref(new Audio(player.currentSong?.audioURL));
-let isHover = ref(false);
+
+let audio = ref();
+audio.value = playerStore.audioPlayer;
+
 let range = ref(0);
 
-const nextSong = () => {
-    playerStore.nextSong();
-}
+onMounted(async () => {
+    await nextTick();
+    audio.value.volume = player.volume / 100;
+    audio.value.onloadedmetadata = () => {
+        if (audio.value.duration) {
+            range.value = (player.currentTime / audio.value.duration) * 100;
+        }
+    };
+});
 
-const prevSong = () => {
-    playerStore.prevSong();
-}   
+watch(() => player.volume, (newVolume) => {
+    audio.value.volume = newVolume / 100;
+});
+
+watch(() => player.currentTime, (newCurrentTime) => {
+    audio.value.onended = handleSongEnd;
+    range.value = newCurrentTime / audio.value.duration * 100;
+});
+
+watch(() => player.currentSong, (newSong) => {
+    if (newSong) {
+        audio.value.pause();
+        player.isPlaying = false;
+        audio.value.src = newSong.audioURL;
+        audio.value.load();
+        audio.value.onended = handleSongEnd;
+        if(player.currentTime != 0) {
+            range.value = playerStore.player.currentTime / audio.value.duration * 100;
+            audio.value.currentTime = playerStore.player.currentTime;
+            return;
+        }
+        togglePlay();
+    };
+});
+
+audio.value.ontimeupdate = () => {
+    playerStore.updateCurrentTime(audio.value.currentTime);
+    range.value = (audio.value.currentTime / audio.value.duration) * 100;
+};
+
+const updateAudioTime = () => {
+    if (audio.value.duration) {
+        const newTime = (range.value / 100) * audio.value.duration;
+        audio.value.currentTime = newTime;
+        playerStore.updateCurrentTime(newTime);
+    };
+};
+
+
 const togglePlay = async () => {
     if (player.isPlaying) {
         audio.value.pause();
+        
     } else {
         try {
-            await audio.value.play();
+            audio.value.play();
             audio.value.currentTime = player.currentTime;
         } catch (error) {
             console.error("Error al reproducir el audio:", error);
-        }
-    }
+        };
+    };
     player.isPlaying = !player.isPlaying;
-} 
+};
+
+const nextSong = () => {
+    if(mainStore.user && player.queue.length > 0) {
+        let nextSong = player.queue[0];
+
+    }
+    playerStore.nextSong();
+};
+
+const handleSongEnd = () => {
+    if (player.queue.length === 0) {
+        player.isPlaying = false;
+        if(mainStore.user) {
+
+        }
+    } else {
+        nextSong();
+    };
+};
+
+const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
+
+const formattedCurrentTime = computed(() => formatTime(player.currentTime));
+const formattedDuration = computed(() => player.currentSong ? formatTime(player.currentSong.duration) : '0:00');
 </script>

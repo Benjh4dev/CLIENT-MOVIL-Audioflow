@@ -20,7 +20,33 @@
                     <ion-col size="10"><h1 class="text-white text-left text-sm"> {{ player.currentSong.artist }} </h1></ion-col>
                 </ion-row>
                 <ion-row>
-                    <ion-range v-model.number="range" :min="0" :max="100"></ion-range>
+                    <!-- Slider del reproductor -->
+                    <div class="flex items-center w-[100vw]">
+                        <div class="text-white text-[12px] pr-2 pt-[11px]">{{ formattedCurrentTime }}</div>
+                        <div
+                            ref="seekerContainer"
+                            class="w-full relative mt-2 mb-3"
+                            @mouseenter="isHover = true"
+                            @mouseleave="isHover = false"
+                        >
+                            <input
+                                v-model="range"
+                                ref="seeker"
+                                type="range"
+                                class="absolute rounded-full my-2 w-full h-0 z-40 appearance-none bg-opacity-100 focus:outline-none accent-white"
+                                :class="{ 'rangeDotHidden': !isHover }"
+                                @input="updateAudioTime"
+                            >
+                            <div
+                                class="pointer-events-none mt-[6px] absolute h-[4px] z-10 inset-y-0 left-0 w-0 bg-green-500"
+                                :style="`width: ${range}%;`"
+                                :class="isHover ? 'bg-green-500' : 'bg-white'"
+                            />
+                            <div class="absolute h-[4px] z-[-0] mt-[6px] inset-y-0 left-0 w-full bg-gray-700 rounded-full" />
+                        </div>
+                        <div class="text-white text-[12px] pl-2 pt-[11px]">{{ formattedDuration }}</div>
+                    </div>
+
                 </ion-row>
                 <ion-row>
                     <ion-col size="3" class="flex justify-center items-center">
@@ -54,14 +80,11 @@
 
 <script setup lang="ts">
 import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar, IonImg, IonRange, IonGrid, IonRow, IonCol} from '@ionic/vue';
-import { playCircleOutline, pauseCircleOutline} from 'ionicons/icons';
 import Play from 'vue-material-design-icons/Play.vue';
 import Pause from 'vue-material-design-icons/Pause.vue';
 import SkipBackward from 'vue-material-design-icons/SkipBackward.vue';
 import SkipForward from 'vue-material-design-icons/SkipForward.vue';
 import { ref, watch, computed, onMounted, nextTick } from 'vue';
-
-import MusicPlayerVolume from '@/components/MusicPlayerVolume.vue'
 
 import { usePlayerStore } from '@/stores/player';
 import { useMainStore } from '@/stores/main';
@@ -70,7 +93,9 @@ const mainStore = useMainStore();
 const playerStore = usePlayerStore();
 const player = playerStore.player;
 
-let audio = ref(new Audio(player.currentSong?.audioURL));
+let audio = ref();
+audio.value = playerStore.audioPlayer;
+
 let isHover = ref(false);
 let range = ref(0);
 
@@ -89,7 +114,7 @@ watch(() => player.volume, (newVolume) => {
 });
 
 watch(() => player.currentTime, (newCurrentTime) => {
-    console.log('asd')
+    console.log(newCurrentTime);
     audio.value.onended = handleSongEnd;
     range.value = newCurrentTime / audio.value.duration * 100;
 });
@@ -116,6 +141,7 @@ audio.value.ontimeupdate = () => {
 };
 
 const updateAudioTime = () => {
+    console.log(range);
     if (audio.value.duration) {
         const newTime = (range.value / 100) * audio.value.duration;
         audio.value.currentTime = newTime;
