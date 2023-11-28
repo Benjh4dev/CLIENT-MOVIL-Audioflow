@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { User, Song, StoreUser, DecodedToken} from '@/interfaces';
+import { User, Song, StoreUser, DecodedToken, Playlist} from '@/interfaces';
 import router from '@/router';
 import jwtDecode from "jwt-decode";
 
@@ -10,12 +10,16 @@ export const useMainStore = defineStore({
         user: User | null;
         token: string;
         mySongs: Song[];
+        myPlaylists: Playlist[];
         systemSongs: Song[];
+        systemPlaylists: Playlist[];
     } => ({
         user: null,
         token: "",
         mySongs: [],
+        myPlaylists: [],
         systemSongs: [],
+        systemPlaylists: [],
     }),
 
     actions: {
@@ -26,11 +30,11 @@ export const useMainStore = defineStore({
         },
 
         logoutUser() {
-                this.user = null;
-                this.token = "";
-                this.mySongs = [];
-                router.push('/');
-                window.location.reload();
+            this.user = null;
+            this.token = "";
+            this.mySongs = [];
+            this.myPlaylists = [];
+            router.push('/');
         },
         verifyTokenValidity() {
             if (!this.token) {
@@ -67,6 +71,15 @@ export const useMainStore = defineStore({
         deleteSystemSong(song: Song) {
             this.systemSongs = this.systemSongs.filter(s => s.id !== song.id);
             this.mySongs = this.mySongs.filter(s => s.id !== song.id);
+        },
+        loadMyPlaylists(playlists: Playlist[]) {
+            this.myPlaylists = playlists;
+        },
+        loadSystemPlaylists(playlists: Playlist[]) {
+            this.systemPlaylists = playlists;
+        },
+        clearMyPlaylists() {
+            this.myPlaylists = [];
         }
     },
     persist: true

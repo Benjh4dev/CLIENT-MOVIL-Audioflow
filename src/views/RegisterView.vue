@@ -96,25 +96,26 @@
 <script setup lang="ts">
 import {IonContent, IonPage, IonImg, IonRow, IonInput,IonButton,IonCol, IonLabel } from '@ionic/vue';
 import { ref } from 'vue';
-import apiClient from '@/services/api'
+import { mapZodErrors } from '@/utils/utils';
+import { RegisterForm, FormErrors } from '@/interfaces';
 
-interface FormData {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+import { useRouter } from 'vue-router';
+import { useMainStore } from '@/stores/main';
+import { usePlayerStore } from '@/stores/player';
 
-interface Errors { [key: string]: string; }
+import { register as registerUser, login as loginUser, fetchUserPlaylists} from '@/api/';
 
-const formData = ref<FormData>({
+const mainStore = useMainStore();
+const playerStore = usePlayerStore();
+const router = useRouter();
+
+const errors = ref<FormErrors>({});
+const formData = ref<RegisterForm>({
     username: '',
     email: '',
     password: '',
     confirmPassword: ''
 });
-
-const errors = ref<Errors>({});
 
 async function addUser(): Promise<void> {
   errors.value = {};
@@ -124,26 +125,41 @@ async function addUser(): Promise<void> {
     return;
 
   } try {
-    const { confirmPassword, ...dataToSend } = formData.value;
-    const response = await apiClient.post('/user/', dataToSend);
-  } catch (error: any) {
-    if(error.response && error.response.data.error) {
-      console.log(error.response)
-      const zodErrors = error.response.data.error.issues;
-      const mappedErrors: Record<string, any> = {};
-      zodErrors.forEach((err: any) => {
-        const fieldName = err.path[0];
-
-        if (!mappedErrors[fieldName]) {
-          mappedErrors[fieldName] = [];
-        }
-        mappedErrors[fieldName].push(err.message);
+      await registerUser(formData.value);
+    
+      try {
+        const user = await loginUser({
+          email: formData.value.email,
+          password: formData.value.password
         });
+        mainStore.loginUser(user);
+
+        // user.player.queue = await loadQueue(user.player.id); //AGREGAR FIRESTORE PARA GUARDAR Y CARGAR DATOS DEL MUSICPLAYER
+        playerStore.storePlayer(user.player);
+
+        const userPlaylists = await fetchUserPlaylists();
+        mainStore.loadMyPlaylists(userPlaylists);
+        router.push('/');
+
+      } catch (error: any) {
+        console.log(error);
+      };
+    
+  } catch (error: any) {
+    if (error.response && error.response.data.error) {
+        const mappedErrors = await mapZodErrors(error);
         errors.value = mappedErrors;
-    }
+      };
+
+      if (formData.value.password !== formData.value.confirmPassword ) {
+        errors.value.confirmPassword = "Las contraseñas no coinciden";
+      };
+
+      if (formData.value.confirmPassword == "" ) {
+        errors.value.confirmPassword = "Este campo no puede ser vacío";
+      };
   }
 }
-
 </script>
     
 <style scoped>

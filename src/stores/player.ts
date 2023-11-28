@@ -4,55 +4,90 @@ import { Player, Song } from '@/interfaces';
 export const usePlayerStore = defineStore({
     id: 'player',
 
-    state: (): Player => ({
-        currentSong: null,
+    state: (): {
+        player: Player;
+        lastPlayed: Song[];
+        subscribed: boolean;
+        audioPlayer: any,
+    } => ({
+        player: {
+            id: '',
+            user_id: '',
+            currentSong: null,
+            queue: [] as Song[],
+            currentTime: 0,
+            volume: 100,
+            isPlaying: false,
+        },
         lastPlayed: [],
-        queue: [],
-        isPlaying: false,
-        currentTime: 0,
-        volume: 80,
+        subscribed: false,
+        audioPlayer: null,
     }),
 
     actions: {
+        setAudioPlayer(audio: any) {
+            this.audioPlayer = audio.value;
+        },
+        storePlayer(player: Player) {
+            const { id, currentTime, volume, user_id, currentSong, queue } = player;
+            this.player.id = id;
+            this.player.user_id = user_id;
+            if(currentSong) this.player.currentSong = currentSong;
+            this.player.currentTime = currentTime;
+            this.player.volume = volume;
+            if(queue) this.player.queue = queue;
+        },
+        destorePlayer() {
+            this.player = {
+                id: '',
+                user_id: '',
+                currentSong: null,
+                queue: [] as Song[],
+                currentTime: 0,
+                volume: 100,
+                isPlaying: false,
+            };
+            this.lastPlayed = [];
+        },
         playSong(song: Song) {
-            if (this.currentSong) {
-                this.lastPlayed.unshift(this.currentSong);
+            if (this.player.currentSong) {
+                if(this.player.currentSong.id == song.id) return;
+                this.lastPlayed.unshift(this.player.currentSong);
                 if (this.lastPlayed.length > 5) {
                     this.lastPlayed.pop();
-                }
-            }
-            this.isPlaying = true;
-            this.currentSong = song;
+                };
+            };
+            this.player.currentTime = 0;
+            this.player.isPlaying = true;
+            this.player.currentSong = song;
         },
-        
         addToQueue(song: Song) {
-            this.queue.push(song);
+            this.player.queue.push(song);
         },
-
         nextSong() {
-            if (this.queue.length > 0) {
-                this.isPlaying = true;
-                this.playSong(this.queue.shift()!);
-            }
+            if (this.player.queue.length > 0) {
+                this.player.currentTime = 0;
+                this.player.isPlaying = true;
+                this.playSong(this.player.queue.shift()!);
+            };
         },        
-
         prevSong() {
             if (this.lastPlayed.length > 0) {
+                if (this.player.currentSong) {
+                    this.player.queue.unshift(this.player.currentSong);
+                };
                 const previousSong = this.lastPlayed.shift();
-                if (this.currentSong) {
-                    this.queue.unshift(this.currentSong);
-                }
-                if(previousSong == null) return;
-                this.currentSong = previousSong;
+                if (previousSong == null) return;
+                this.player.currentTime = 0;
+                this.player.isPlaying = true;
+                this.player.currentSong = previousSong;
             }
         },
-
         updateCurrentTime(time: number) {
-            this.currentTime = time;
+            this.player.currentTime = time;
         },
-
         updateVolume(volume: number) {
-            this.volume = volume;
+            this.player.volume = volume;
         },
     },
     persist: true

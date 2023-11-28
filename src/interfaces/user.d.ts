@@ -4,9 +4,3 @@ export interface User {
     picture_url: string;
     username: string;
 };
-
-export interface UserPlaylist {
-    id: number;
-    name: string;
-    pic_url: string;
-};

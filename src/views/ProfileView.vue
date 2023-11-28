@@ -1,18 +1,12 @@
 <template>
     <ion-page>
-        <ion-header>
+        <ion-header class="bg-[#212121]">
             <TopBar></TopBar>            
-            <div class="absolute inset-0 flex justify-center items-center">
-                    <button @click="logout" class="text-white py-2 px-4 rounded-3xl border-solid border border-white text-sm">
-                        Cerrar sesión
-                    </button>
-            </div>
-        </ion-header>
-        <ion-content>
-            <div class="bg-[#212121] py-5">
+            
+            <div class="bg-[#212121] py-5 m">
                 <div class="flex space-x-5 mx-5">
                     <div>
-                        <img src="/images/icons/guest-pic.png" class=" h-[70px] w-[70px]">            
+                        <img :src="userImage" class="rounded-full h-[70px] w-[70px]">            
                     </div>
 
                     <div class="text-white self-center">
@@ -22,38 +16,46 @@
                 </div>
 
                 <div class="flex space-x-4 justify-center mt-5">
-                    <button class= "text-white py-2 rounded-3xl w-[120px] border-solid border border-white text-sm"> Mis canciones</button>
-                    <button class="text-white py-2 rounded-3xl w-[120px] border-solid border border-white text-sm"> Mis playlist</button>
+                    <button class= "text-white py-2 rounded-3xl w-[120px] border-solid border border-white text-sm" @click="toggleList('songs')">
+                        Mis canciones
+                    </button>
+                    <button class="text-white py-2 rounded-3xl w-[120px] border-solid border border-white text-sm" @click="toggleList('playlists')">
+                        Mis playlist
+                    </button>
                 </div>
             </div>
+        </ion-header>
+        <ion-content>
             <ion-list class="bg-[#212121]">
-                <li v-for="number in 50" :key="number">
-                    <SongRow v-for="song in mainStore.systemSongs" :song="song" :key="song.id"></SongRow>
-                </li>
-                
+                <div v-if="showMySongs" >
+                    <h1 class="text-white text-2xl ml-5 mb-3 font-bold">
+                        Tus canciones
+                    </h1>
+                    <SongRow v-for="song in mainStore.mySongs" :song="song" :key="song.id"></SongRow>
+                </div>
+                <div v-else>
+                    <h1 class="text-white text-2xl ml-5 mb-3 font-bold">
+                        Tus playlists
+                    </h1>
+                    <!-- PlaylistRow?? -->
+                </div>
             </ion-list>
         </ion-content>
         <ion-footer class="shadow-none">
-            <MusicPlayer v-if="playerStore.currentSong" :song ="playerStore.currentSong"></MusicPlayer>
+            <MusicPlayer v-if="playerStore.player.currentSong" :song ="playerStore.player.currentSong"></MusicPlayer>
         </ion-footer>
     </ion-page>
 </template>
 
-
-
 <script setup lang="ts">
-import { IonPage } from '@ionic/vue';
-import { defineProps } from 'vue';
-import { IonHeader } from '@ionic/vue';
-import { IonFooter } from '@ionic/vue';
-import { IonList } from '@ionic/vue';
-import { IonContent } from '@ionic/vue';
+import { IonPage, IonHeader, IonFooter, IonList, IonContent } from '@ionic/vue';
+
 import TopBar from '@/components/TopBar.vue';
 import SongRow from '@/components/SongRow.vue';
 import MusicPlayer from '@/components/MusicPlayer.vue';
 
-import { fetchSongs } from '../api';
-import { onMounted, ref } from 'vue';
+import { fetchUserSongs } from '@/api';
+import { onMounted, ref, computed } from 'vue';
 import { useMainStore } from '@/stores/main';
 import { usePlayerStore } from '@/stores/player';
 import { useRouter } from 'vue-router';
@@ -61,11 +63,45 @@ import { useRouter } from 'vue-router';
 const mainStore = useMainStore();
 const playerStore = usePlayerStore();
 
+const showMySongs = ref(true);
+const showMyPlaylists = ref(false);
+
+const toggleList = (list: string) => {
+    if(list === 'songs') {
+        showMySongs.value = true;
+        showMyPlaylists.value = false;
+    } else {
+        showMySongs.value = false;
+        showMyPlaylists.value = true;
+    }
+};
+
 const router = useRouter();
+
+const userImage = computed(() => {
+    if(mainStore.user === null) return '/images/icons/guest-pic.png';
+    if(mainStore.user?.picture_url != '') {
+        return mainStore.user?.picture_url;
+    } else {
+        return '/images/icons/guest-pic.png';
+    }
+});
 
 const logout = () => {
     mainStore.logoutUser();
     router.push('/login'); 
 };
 
+const getUserSongs = async () => {
+    try {
+        const response = await fetchUserSongs();
+        mainStore.loadMySongs(response);
+    } catch (error) {
+        console.error('Hubo un error al hacer fetch:', error);
+    }
+};
+
+onMounted(() => {
+    getUserSongs();
+});
 </script>

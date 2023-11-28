@@ -8,25 +8,19 @@
                 <h1 class="text-white text-2xl ml-5 mb-3 font-bold">
                     Recomendaciones
                 </h1>
-
                 <SongRow v-for="song in mainStore.systemSongs" :song="song" :key="song.id"></SongRow>
-                
             </ion-list>
         </ion-content>
         <ion-footer class="shadow-none">
-            <MusicPlayer :song ="playerStore.currentSong || mainStore.systemSongs[0]"></MusicPlayer>
+            <MusicPlayer v-if="isInitialized"></MusicPlayer>
         </ion-footer>
     </ion-page>
 </template>
 
 
 <script setup lang="ts">
-import { IonPage } from '@ionic/vue';
-import { defineProps } from 'vue';
-import { IonHeader } from '@ionic/vue';
-import { IonFooter } from '@ionic/vue';
-import { IonList } from '@ionic/vue';
-import { IonContent } from '@ionic/vue';
+import { IonPage, IonHeader, IonFooter, IonList, IonContent } from '@ionic/vue';
+
 import TopBar from '@/components/TopBar.vue';
 import SongRow from '@/components/SongRow.vue';
 import MusicPlayer from '@/components/MusicPlayer.vue';
@@ -40,10 +34,7 @@ const mainStore = useMainStore();
 const playerStore = usePlayerStore();
 
 const isFetching = ref(true);
-
-const props = defineProps({
-    email: String || "Invitado",
-});
+const isInitialized = ref(false);
 
 const getSongs = async () => {
     try {
@@ -51,18 +42,25 @@ const getSongs = async () => {
         isFetching.value = false;
         mainStore.loadSongs(response.songs);
 
-        if(playerStore.currentSong === null) {
+        if(playerStore.player.currentSong === null) {
             playerStore.playSong(mainStore.systemSongs[0]);
         }
-        console.log(response);
+        isFetching.value = true;
     } catch (error) {
     console.error('Hubo un error al hacer fetch:', error);
     }
 };
 
+const initializePlayer = () => {
+    const audio = ref(new Audio(playerStore.player.currentSong?.audioURL));
+    playerStore.setAudioPlayer(audio);
+    isInitialized.value = true;
+};
+
 onMounted(async () => {
     mainStore.clearSystemSongs();
     getSongs();
+    initializePlayer();
 });
 
 </script>
