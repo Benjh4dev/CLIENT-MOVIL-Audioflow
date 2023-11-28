@@ -37,7 +37,7 @@
                     <h1 class="text-white text-2xl ml-5 mb-3 font-bold">
                         Tus playlists
                     </h1>
-                    <!-- PlaylistRow?? -->
+                    <PlaylistRow v-for="playlist in mainStore.myPlaylists" :playlist="playlist" :key="playlist.id"></PlaylistRow>
                 </div>
             </ion-list>
         </ion-content>
@@ -53,6 +53,7 @@ import { IonPage, IonHeader, IonFooter, IonList, IonContent } from '@ionic/vue';
 import TopBar from '@/components/TopBar.vue';
 import SongRow from '@/components/SongRow.vue';
 import MusicPlayer from '@/components/MusicPlayer.vue';
+import PlaylistRow from '@/components/PlaylistRow.vue';
 
 import { fetchUserSongs } from '@/api';
 import { onMounted, ref, computed } from 'vue';
