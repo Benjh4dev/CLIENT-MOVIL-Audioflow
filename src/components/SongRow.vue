@@ -25,7 +25,6 @@ const props = defineProps({
     }
 });
 const playSong = () => {
-    console.log('Reproduciendo canción');
     playerStore.playSong(props.song);
 };
 

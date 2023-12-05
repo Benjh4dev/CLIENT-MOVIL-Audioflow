@@ -1,11 +1,6 @@
 <template>
     <div class="flex justify-between h-[80px] bg-[#212121] sticky top-0 items-center">
-        <router-link v-if="isVisible" to="/">
-            <button class="h-[45px] w-[45px] ml-5">
-                <img src="/images/icons/audioflow-logo.png" class=" h-[45px] w-[45px]">
-            </button>
-        </router-link>
-        <router-link v-else to="/login">
+        <router-link to="/">
             <button class="h-[45px] w-[45px] ml-5">
                 <img src="/images/icons/audioflow-logo.png" class=" h-[45px] w-[45px]">
             </button>
@@ -15,7 +10,12 @@
                     Cerrar sesión
                 </button>
             </div>
-        <router-link to="/profile">
+        <router-link to="/login" v-if="!mainStore.user">
+            <button class="h-[45px] w-[45px] ml-auto mr-5">
+                <img :src="userImage" class="rounded-full h-[45px] w-[55px]">
+            </button>    
+        </router-link>
+        <router-link to="/profile" v-else>
             <button class="h-[45px] w-[45px] ml-auto mr-5">
                 <img :src="userImage" class="rounded-full h-[45px] w-[55px]">
             </button>    
@@ -39,8 +39,8 @@ const isVisible = computed(() => {
 })
 
 const logout = () => {
-    playerStore.destorePlayer();
     mainStore.logoutUser();
+    playerStore.destorePlayer();
     router.push('/login'); 
 };
 

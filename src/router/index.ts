@@ -41,11 +41,11 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const mainStore = useMainStore();
 
-  if (to.meta.requiresAuth && !mainStore.$state.token) {
+  if (to.meta.requiresAuth && !mainStore.token) {
     next('/');
     console.log('No autenticado');
     return;
-  } else if ((to.path === '/login' || to.path === '/register') && mainStore.$state.token) {
+  } else if ((to.path === '/login' || to.path === '/register') && mainStore.token) {
     next('/');
     console.log('Autenticado, no puede acceder');
     return;
