@@ -1,8 +1,8 @@
 import api from '@/services/api';
 import { useMainStore } from '@/stores/main';
 
-export async function fetchSongs(searchQuery: string) {
-    const response = await api.get(`/song/?search=${searchQuery}`);
+export async function fetchSongs() {
+    const response = await api.get(`/song`);
     return response.data;
 };
 

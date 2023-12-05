@@ -1,11 +1,6 @@
 import api from '@/services/api';
 import { useMainStore } from '@/stores/main';
 
-export async function fetchPlaylists() {
-    const response = await api.get('/playlist');
-    return response.data;
-};
-
 export async function fetchUserPlaylists() {
     const mainStore = useMainStore();
     mainStore.verifyTokenValidity();

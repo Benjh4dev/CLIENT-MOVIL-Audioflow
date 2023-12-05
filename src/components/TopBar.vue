@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-between h-[80px] bg-[#212121] sticky top-0 items-center">
+    <div class="flex justify-between h-[80px] bg-black sticky top-0 items-center mt-1">
         <router-link to="/">
             <button class="h-[45px] w-[45px] ml-5">
                 <img src="/images/icons/audioflow-logo.png" class=" h-[45px] w-[45px]">

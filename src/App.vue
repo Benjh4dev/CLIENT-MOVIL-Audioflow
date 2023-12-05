@@ -21,12 +21,13 @@ const playerStore = usePlayerStore();
 
 const getSongs = async () => {
     try {
-        const response = await fetchSongs('');
-        mainStore.loadSongs(response.songs);
+      const response = await fetchSongs();
+      mainStore.loadSongs(response.songs);
 
-        if(playerStore.player.currentSong === null) {
-            playerStore.playSong(mainStore.systemSongs[0]);
-        }
+      if(playerStore.player.currentSong === null) {
+          playerStore.playSong(mainStore.systemSongs[0]);
+      }
+      console.log('Se obtuvieron las canciones del sistema')
     } catch (error) {
     console.error('Hubo un error al hacer fetch:', error);
     }

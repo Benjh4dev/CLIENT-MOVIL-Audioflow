@@ -4,65 +4,69 @@
             <ion-grid v-if="playerStore.player.currentSong">
                 <ion-row>
                     <ion-col class ="flex justify-center items-center" size="2">
-                    <router-link to="/" ><img  class = "w-1/2" src="/images/icons/chevron-down-outline.png" style="filter: invert(1)" /></router-link>
+                        <router-link to="/" ><img  class = "w-1/2" src="/images/icons/chevron-down-outline.png" style="filter: invert(1)" /></router-link>
                     </ion-col>
-                    <ion-col size="8"><h4 class="text-white text-center">Reproduciendo Canción</h4> </ion-col>
+                    <ion-col size="8" class="pt-2">
+                        <h4 class="text-white text-center">Reproduciendo Canción</h4>
+                    </ion-col>
                 </ion-row>
 
                 <ion-row class="pt-10">
-                    <ion-col class="flex justify-center items-center"><ion-img :src ="playerStore.player.currentSong.coverURL"  alt="Song Image" /></ion-col>
+                    <ion-col class="flex justify-center items-center min-h-[350px]">
+                        <ion-img :src="playerStore.player.currentSong.coverURL" alt="Song Image" />
+                    </ion-col>
                 </ion-row>
 
+                <ion-row class="pt-10 pl-1">
+                    <ion-col>
+                        <h1 class="text-white text-left font-bold text-2xl"> {{ playerStore.player.currentSong.name }}</h1>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="10" class="pt-2 pl-2">
+                        <h1 class="text-gray-400 text-left text-sm"> {{ playerStore.player.currentSong.artist }} </h1>
+                    </ion-col>
+                </ion-row>
                 <ion-row class="pt-6">
-                    <ion-col><h1 class="text-white text-left font-bold"> {{ playerStore.player.currentSong.name }} </h1></ion-col>
-                </ion-row>
-                <ion-row>
-                    <ion-col size="10"><h1 class="text-white text-left text-sm"> {{ playerStore.player.currentSong.artist }} </h1></ion-col>
-                </ion-row>
-                <ion-row>
                     <!-- Slider del reproductor -->
                     <div class="flex items-center w-[100vw]">
-                        <div class="text-white text-[12px] pr-2 pt-[11px]">{{ formattedCurrentTime }}</div>
+                        <div class="text-white text-[12px] pr-2 pt-[11px] pl-2">{{ formattedCurrentTime }}</div>
                         <div
                             ref="seekerContainer"
                             class="w-full relative mt-2 mb-3"
-                            @mouseenter="isHover = true"
-                            @mouseleave="isHover = false"
                         >
                             <input
                                 v-model="range"
                                 ref="seeker"
                                 type="range"
                                 class="absolute rounded-full my-2 w-full h-0 z-40 appearance-none bg-opacity-100 focus:outline-none accent-white"
-                                :class="{ 'rangeDotHidden': !isHover }"
                                 @input="updateAudioTime"
                             >
                             <div
                                 class="pointer-events-none mt-[6px] absolute h-[4px] z-10 inset-y-0 left-0 w-0 bg-green-500"
                                 :style="`width: ${range}%;`"
-                                :class="isHover ? 'bg-green-500' : 'bg-white'"
                             />
                             <div class="absolute h-[4px] z-[-0] mt-[6px] inset-y-0 left-0 w-full bg-gray-700 rounded-full" />
                         </div>
-                        <div class="text-white text-[12px] pl-2 pt-[11px]">{{ formattedDuration }}</div>
+                        <div class="text-white text-[12px] pl-2 pt-[11px] pr-3">{{ formattedDuration }}</div>
                     </div>
 
                 </ion-row>
-                <ion-row>
+                <ion-row class="pt-10">
                     <ion-col size="3" class="flex justify-center items-center">
                         <ion-button fill="clear" @click="prevSong">
-                            <SkipBackward class="text-white" :size="30" />
+                            <SkipBackward class="text-white" :size="40" />
                         </ion-button>
                     </ion-col>
                     <ion-col size="6" class="flex justify-center items-center">
                         <ion-button fill="clear" @click="togglePlay">
-                            <Play class="text-white" v-if="!playerStore.player.isPlaying" :size="40" />
-                            <Pause class="text-white" v-if="playerStore.player.isPlaying" :size="40" />
+                            <Play class="text-white" v-if="!playerStore.player.isPlaying" :size="50" />
+                            <Pause class="text-white" v-if="playerStore.player.isPlaying" :size="50" />
                         </ion-button>
                     </ion-col>
                     <ion-col size="3" class="flex justify-center items-center">
                         <ion-button fill="clear" @click="nextSong">
-                            <SkipForward class="text-white" :size="30" />
+                            <SkipForward class="text-white" :size="40" />
                         </ion-button>
                     </ion-col>
                 </ion-row>
@@ -88,7 +92,6 @@ const playerStore = usePlayerStore();
 let audio = ref();
 audio.value = playerStore.audioPlayer;
 
-let isHover = ref(false);
 let range = ref(0);
 
 onBeforeMount(async () => {

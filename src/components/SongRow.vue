@@ -4,7 +4,7 @@
             class="h-[50px] w-[50px] ml-5 rounded-md">
         <div class="ml-3">
             <h1 class="font-bold text-l">{{ props.song.name }} </h1>
-            <h2 class="text-xs">{{ props.song.artist }}</h2>
+            <h2 class="text-xs text-gray-400">{{ props.song.artist }}</h2>
         </div>
         <div class="text-right ml-auto mr-5">
             <h2>{{ formatTime(props.song.duration) }}</h2>
@@ -24,6 +24,7 @@ const props = defineProps({
         required: true
     }
 });
+
 const playSong = () => {
     playerStore.playSong(props.song);
 };

@@ -32,10 +32,9 @@ const props = defineProps({
         required: true
     }
 });
+
 const SelectPlaylist = () => {
     router.push(`/`)
     
 };
-
-
 </script>

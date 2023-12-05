@@ -12,14 +12,12 @@ export const useMainStore = defineStore({
         mySongs: Song[];
         myPlaylists: Playlist[];
         systemSongs: Song[];
-        systemPlaylists: Playlist[];
     } => ({
         user: null,
         token: "",
         mySongs: [],
         myPlaylists: [],
         systemSongs: [],
-        systemPlaylists: [],
     }),
 
     actions: {
@@ -58,25 +56,14 @@ export const useMainStore = defineStore({
         loadSongs(songs: Song[]) {
             this.systemSongs = songs;
         },
-        addSystemSong(song: Song) {
-            this.systemSongs.push(song);
-            this.mySongs.push(song);
-        },
         clearSystemSongs() {
             this.systemSongs = [];
         },
         clearMySongs() {
             this.mySongs = [];
         },
-        deleteSystemSong(song: Song) {
-            this.systemSongs = this.systemSongs.filter(s => s.id !== song.id);
-            this.mySongs = this.mySongs.filter(s => s.id !== song.id);
-        },
         loadMyPlaylists(playlists: Playlist[]) {
             this.myPlaylists = playlists;
-        },
-        loadSystemPlaylists(playlists: Playlist[]) {
-            this.systemPlaylists = playlists;
         },
         clearMyPlaylists() {
             this.myPlaylists = [];
