@@ -56,10 +56,9 @@ import MusicPlayer from '@/components/MusicPlayer.vue';
 import PlaylistRow from '@/components/PlaylistRow.vue';
 
 import { fetchUserSongs } from '@/api';
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import { useMainStore } from '@/stores/main';
 import { usePlayerStore } from '@/stores/player';
-import { useRouter } from 'vue-router';
 
 const mainStore = useMainStore();
 const playerStore = usePlayerStore();
@@ -77,8 +76,6 @@ const toggleList = (list: string) => {
     }
 };
 
-const router = useRouter();
-
 const userImage = computed(() => {
     if(mainStore.user === null) return '/images/icons/guest-pic.png';
     if(mainStore.user?.picture_url != '') {
@@ -88,11 +85,6 @@ const userImage = computed(() => {
     }
 });
 
-const logout = () => {
-    mainStore.logoutUser();
-    router.push('/login'); 
-};
-
 const getUserSongs = async () => {
     try {
         const response = await fetchUserSongs();
@@ -101,6 +93,10 @@ const getUserSongs = async () => {
         console.error('Hubo un error al hacer fetch:', error);
     }
 };
+
+watch(() => mainStore.user, (newUser) => {
+    getUserSongs();
+});
 
 onMounted(() => {
     getUserSongs();

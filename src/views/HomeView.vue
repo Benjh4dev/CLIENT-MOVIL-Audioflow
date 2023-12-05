@@ -8,11 +8,11 @@
                 <h1 class="text-white text-2xl ml-5 mb-3 font-bold">
                     Recomendaciones
                 </h1>
-                <SongRow v-for="song in mainStore.systemSongs" :song="song" :key="song.id"></SongRow>
+                <SongRow v-for="song in mainStore.systemSongs" :song="song"></SongRow>
             </ion-list>
         </ion-content>
         <ion-footer class="shadow-none">
-            <MusicPlayer v-if="isInitialized"></MusicPlayer>
+            <MusicPlayer></MusicPlayer>
         </ion-footer>
     </ion-page>
 </template>
@@ -25,17 +25,15 @@ import TopBar from '@/components/TopBar.vue';
 import SongRow from '@/components/SongRow.vue';
 import MusicPlayer from '@/components/MusicPlayer.vue';
 
-import { fetchSongs } from '../api';
+import { fetchSongs } from '@/api';
 import { onMounted, ref} from 'vue';
 import { useMainStore } from '@/stores/main';
 import { usePlayerStore } from '@/stores/player';
-import { storeToRefs } from 'pinia';
 
 const mainStore = useMainStore();
 const playerStore = usePlayerStore();
 
 const isFetching = ref(true);
-const isInitialized = ref(false);
 
 const getSongs = async () => {
     try {
@@ -52,16 +50,8 @@ const getSongs = async () => {
     }
 };
 
-const initializePlayer = () => {
-    const audio = ref(new Audio(playerStore.player.currentSong?.audioURL));
-    playerStore.setAudioPlayer(audio);
-    isInitialized.value = true;
-};
-
 onMounted(async () => {
     mainStore.clearSystemSongs();
     getSongs();
-    initializePlayer();
 });
-
 </script>

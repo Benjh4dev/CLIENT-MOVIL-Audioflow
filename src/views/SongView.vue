@@ -1,7 +1,7 @@
 <template>
     <ion-page>
         <ion-content class="ion-padding">
-            <ion-grid v-if="player.currentSong">
+            <ion-grid v-if="playerStore.player.currentSong">
                 <ion-row>
                     <ion-col class ="flex justify-center items-center" size="2">
                     <router-link to="/" ><img  class = "w-1/2" src="/images/icons/chevron-down-outline.png" style="filter: invert(1)" /></router-link>
@@ -10,14 +10,14 @@
                 </ion-row>
 
                 <ion-row class="pt-10">
-                    <ion-col class="flex justify-center items-center"><ion-img :src ="player.currentSong.coverURL"  alt="Song Image" /></ion-col>
+                    <ion-col class="flex justify-center items-center"><ion-img :src ="playerStore.player.currentSong.coverURL"  alt="Song Image" /></ion-col>
                 </ion-row>
 
                 <ion-row class="pt-6">
-                    <ion-col><h1 class="text-white text-left font-bold"> {{ player.currentSong.name }} </h1></ion-col>
+                    <ion-col><h1 class="text-white text-left font-bold"> {{ playerStore.player.currentSong.name }} </h1></ion-col>
                 </ion-row>
                 <ion-row>
-                    <ion-col size="10"><h1 class="text-white text-left text-sm"> {{ player.currentSong.artist }} </h1></ion-col>
+                    <ion-col size="10"><h1 class="text-white text-left text-sm"> {{ playerStore.player.currentSong.artist }} </h1></ion-col>
                 </ion-row>
                 <ion-row>
                     <!-- Slider del reproductor -->
@@ -56,8 +56,8 @@
                     </ion-col>
                     <ion-col size="6" class="flex justify-center items-center">
                         <ion-button fill="clear" @click="togglePlay">
-                            <Play class="text-white" v-if="!player.isPlaying" :size="40" />
-                            <Pause class="text-white" v-if="player.isPlaying" :size="40" />
+                            <Play class="text-white" v-if="!playerStore.player.isPlaying" :size="40" />
+                            <Pause class="text-white" v-if="playerStore.player.isPlaying" :size="40" />
                         </ion-button>
                     </ion-col>
                     <ion-col size="3" class="flex justify-center items-center">
@@ -77,14 +77,13 @@ import Play from 'vue-material-design-icons/Play.vue';
 import Pause from 'vue-material-design-icons/Pause.vue';
 import SkipBackward from 'vue-material-design-icons/SkipBackward.vue';
 import SkipForward from 'vue-material-design-icons/SkipForward.vue';
-import { ref, watch, computed, onMounted, nextTick } from 'vue';
+import { ref, watch, computed, onMounted, nextTick, onBeforeMount } from 'vue';
 
 import { usePlayerStore } from '@/stores/player';
 import { useMainStore } from '@/stores/main';
 
 const mainStore = useMainStore();
 const playerStore = usePlayerStore();
-const player = playerStore.player;
 
 let audio = ref();
 audio.value = playerStore.audioPlayer;
@@ -92,33 +91,38 @@ audio.value = playerStore.audioPlayer;
 let isHover = ref(false);
 let range = ref(0);
 
+onBeforeMount(async () => {
+    await nextTick();
+    audio.value = playerStore.audioPlayer;
+});
+
 onMounted(async () => {
     await nextTick();
-    audio.value.volume = player.volume / 100;
+    audio.value.volume = playerStore.player.volume / 100;
     audio.value.onloadedmetadata = () => {
         if (audio.value.duration) {
-            range.value = (player.currentTime / audio.value.duration) * 100;
+            range.value = (playerStore.player.currentTime / audio.value.duration) * 100;
         }
     };
 });
 
-watch(() => player.volume, (newVolume) => {
+watch(() => playerStore.player.volume, (newVolume) => {
     audio.value.volume = newVolume / 100;
 });
 
-watch(() => player.currentTime, (newCurrentTime) => {
+watch(() => playerStore.player.currentTime, (newCurrentTime) => {
     audio.value.onended = handleSongEnd;
     range.value = newCurrentTime / audio.value.duration * 100;
 });
 
-watch(() => player.currentSong, (newSong) => {
+watch(() => playerStore.player.currentSong, (newSong) => {
     if (newSong) {
         audio.value.pause();
-        player.isPlaying = false;
+        playerStore.player.isPlaying = false;
         audio.value.src = newSong.audioURL;
         audio.value.load();
         audio.value.onended = handleSongEnd;
-        if(player.currentTime != 0) {
+        if(playerStore.player.currentTime != 0) {
             range.value = playerStore.player.currentTime / audio.value.duration * 100;
             audio.value.currentTime = playerStore.player.currentTime;
             return;
@@ -142,23 +146,23 @@ const updateAudioTime = () => {
 
 
 const togglePlay = async () => {
-    if (player.isPlaying) {
+    if (playerStore.player.isPlaying) {
         audio.value.pause();
         
     } else {
         try {
             audio.value.play();
-            audio.value.currentTime = player.currentTime;
+            audio.value.currentTime = playerStore.player.currentTime;
         } catch (error) {
             console.error("Error al reproducir el audio:", error);
         };
     };
-    player.isPlaying = !player.isPlaying;
+    playerStore.player.isPlaying = !playerStore.player.isPlaying;
 };
 
 const nextSong = () => {
-    if(mainStore.user && player.queue.length > 0) {
-        let nextSong = player.queue[0];
+    if(mainStore.user && playerStore.player.queue.length > 0) {
+        let nextSong = playerStore.player.queue[0];
 
     }
     playerStore.nextSong();
@@ -180,8 +184,8 @@ const prevSong = () => {
 };
 
 const handleSongEnd = () => {
-    if (player.queue.length === 0) {
-        player.isPlaying = false;
+    if (playerStore.player.queue.length === 0) {
+        playerStore.player.isPlaying = false;
         if(mainStore.user) {
 
         }
@@ -196,15 +200,15 @@ const formatTime = (seconds: number) => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
 };
 
-const formattedCurrentTime = computed(() => formatTime(player.currentTime));
-const formattedDuration = computed(() => player.currentSong ? formatTime(player.currentSong.duration) : '0:00');
+const formattedCurrentTime = computed(() => formatTime(playerStore.player.currentTime));
+const formattedDuration = computed(() => playerStore.player.currentSong ? formatTime(playerStore.player.currentSong.duration) : '0:00');
 </script>
 
 <style scoped>
 ion-content {
     --background: #000;
-    --overflow: hidden; /* Deshabilita el desplazamiento vertical */
-    height: 100vh; /* Asegura que ion-content ocupe toda la altura de la ventana */
+    --overflow: hidden;
+    height: 100vh;
 }
 
 ion-range {

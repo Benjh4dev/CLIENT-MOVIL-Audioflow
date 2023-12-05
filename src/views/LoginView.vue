@@ -72,15 +72,15 @@
 
 <script setup lang="ts">
 import { IonContent, IonPage, IonImg, IonRow, IonInput, IonButton, IonCol, IonLabel } from '@ionic/vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+
 import { useRouter } from 'vue-router';
 import { useMainStore } from '@/stores/main';
 import { usePlayerStore } from '@/stores/player';
 
-import { fetchUserPlaylists, login } from '@/api';
-
-import apiClient from '@/services/api';
 import { LoginForm } from '@/interfaces';
+
+import { fetchUserPlaylists, login } from '@/api';
 
 const mainStore = useMainStore();
 const playerStore = usePlayerStore();
@@ -93,6 +93,14 @@ const formData = ref<LoginForm>({
 });
 
 const router = useRouter();
+
+watch(() => mainStore.user, (newUser) => {
+  errors.value = '';
+  formData.value = {
+  email: '',
+  password: '',
+  };
+});
 
 async function loginUser(): Promise<void> {
   errors.value = '';
@@ -107,6 +115,7 @@ async function loginUser(): Promise<void> {
 
     const userPlaylists = await fetchUserPlaylists();
     mainStore.loadMyPlaylists(userPlaylists);
+
     router.push('/');
     
   } catch (error: any) {    

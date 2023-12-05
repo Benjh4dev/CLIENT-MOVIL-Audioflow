@@ -38,10 +38,12 @@ export const usePlayerStore = defineStore({
             if(queue) this.player.queue = queue;
         },
         destorePlayer() {
+            this.audioPlayer.pause();
+            this.player.isPlaying = false;
             this.player = {
                 id: '',
                 user_id: '',
-                currentSong: null,
+                currentSong: this.player.currentSong,
                 queue: [] as Song[],
                 currentTime: 0,
                 volume: 100,
