@@ -1,25 +1,28 @@
 <template>
-    <div class="bg-green-700 flex justify-between h-[85px]">
+    <div class="bg-black flex justify-between h-[100px]">
             <router-link to ="/song">
-                <div class="flex">
-                    <div class="flex items-center m-2 w-[80vw]">
-                        <img class="rounded-lg shadow-2xl" :src="playerStore.player.currentSong?.coverURL" width="70" alt="Portada del álbum">
+                <div class="flex h-[100px] ml-1">
+                    <div class="flex items-center m-2 w-[50vw]">
+                        <img class="rounded-lg shadow-2xl object-cover" :src="playerStore.player.currentSong?.coverURL" width="70" height="70" alt="Portada del álbum">
                         <div class="ml-3 md:opacity-100 group transition-all duration-300 ease-in-out">
-                            <div class="text-[14px] text-white hover:underline cursor-pointer">
+                            <div class="text-[16px] text-white font-semibold">
                                 {{playerStore.player.currentSong?.name}}
                             </div>
-                            <div class="text-[11px] text-gray-300 font-semibold hover:underline hover:text-white cursor-pointer truncate">
+                            <div class="text-[11px] text-gray-400 font-semibold truncate">
                                 {{playerStore.player.currentSong?.artist}}
                             </div>
                         </div>
                     </div>
+                    <div class="text-[13px] text-gray-400 font-semibold truncate mt-10 ml-20 w-[10vw]">
+                        {{ formatTime(playerStore.player.currentTime) }}
+                    </div>
                 </div>
             </router-link>
-            <div class="flex justify-center items-center pr-8">
-                <div >
+            <div class="flex justify-center items-center pr-5">
+                <div class="mt-2">
                     <button @click="togglePlay">
-                        <Play class="text-white" v-if="!playerStore.player.isPlaying" :size="45" />
-                        <Pause class="text-white" v-if="playerStore.player.isPlaying" :size="45" />
+                        <Play class="text-white" v-if="!playerStore.player.isPlaying" :size="50" />
+                        <Pause class="text-white" v-if="playerStore.player.isPlaying" :size="50" />
                     </button>
                 </div>
             </div>
@@ -27,7 +30,7 @@
 </template>
   
 <script setup lang="ts">
-import { ref, watch, computed, onMounted, nextTick, onBeforeMount } from 'vue';
+import { ref, watch, onMounted, nextTick, onBeforeMount, computed } from 'vue';
 
 import Play from 'vue-material-design-icons/Play.vue';
 import Pause from 'vue-material-design-icons/Pause.vue';
@@ -37,7 +40,6 @@ import { useMainStore } from '@/stores/main';
 
 const mainStore = useMainStore();
 const playerStore = usePlayerStore();
-const player = playerStore.player;
 
 let audio = ref();
 let range = ref(0);
@@ -50,10 +52,10 @@ onBeforeMount(async () => {
 
 onMounted(async () => {
     await nextTick();
-    audio.value.volume = player.volume / 100;
+    audio.value.volume = playerStore.player.volume / 100;
     audio.value.onloadedmetadata = () => {
         if (audio.value.duration) {
-            range.value = (player.currentTime / audio.value.duration) * 100;
+            range.value = (playerStore.player.currentTime / audio.value.duration) * 100;
         }
     };
 });
@@ -105,16 +107,16 @@ const togglePlay = async () => {
 };
 
 const nextSong = () => {
-    if(mainStore.user && player.queue.length > 0) {
-        let nextSong = player.queue[0];
+    if(mainStore.user && playerStore.player.queue.length > 0) {
+        let nextSong = playerStore.player.queue[0];
 
     }
     playerStore.nextSong();
 };
 
 const handleSongEnd = () => {
-    if (player.queue.length === 0) {
-        player.isPlaying = false;
+    if (playerStore.player.queue.length === 0) {
+        playerStore.player.isPlaying = false;
         if(mainStore.user) {
 
         }
@@ -122,4 +124,13 @@ const handleSongEnd = () => {
         nextSong();
     };
 };
+
+const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
+
+const formattedCurrentTime = computed(() => formatTime(playerStore.player.currentTime));
+const formattedDuration = computed(() => playerStore.player.currentSong ? formatTime(playerStore.player.currentSong.duration) : '0:00');
 </script>

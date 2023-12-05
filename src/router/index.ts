@@ -43,15 +43,12 @@ router.beforeEach((to, from, next) => {
 
   if (to.meta.requiresAuth && !mainStore.token) {
     next('/');
-    console.log('No autenticado');
     return;
   } else if ((to.path === '/login' || to.path === '/register') && mainStore.token) {
     next('/');
-    console.log('Autenticado, no puede acceder');
     return;
   }
   else {
-    console.log('Autenticado');
     next();
   }
 });

@@ -1,32 +1,32 @@
 <template>
-    <ion-page class="bg-[#212121]">
-        <ion-header class="bg-[#212121]">
+    <ion-page class="bg-[#121212]">
+        <ion-header class="bg-[#121212]">
             <TopBar></TopBar>            
             
-            <div class="bg-[#212121] py-5 m">
+            <div class="bg-green-600 py-5 m">
                 <div class="flex space-x-5 mx-5">
                     <div>
-                        <img :src="userImage" class="rounded-full h-[70px] w-[70px]">            
+                        <img :src="userImage" class="rounded-full h-[70px] w-[70px] shadow-2xl">            
                     </div>
 
                     <div class="text-white self-center">
                         <h1 class="text-white font-bold text-2xl"> {{ mainStore.user?.username }}</h1>
-                        <h1>{{ mainStore.user?.email }}</h1>
+                        <h1 class="text-white">{{ mainStore.user?.email }}</h1>
                     </div>
                 </div>
 
                 <div class="flex space-x-4 justify-center mt-5">
-                    <button class= "text-white py-2 rounded-3xl w-[120px] border-solid border border-white text-sm" @click="toggleList('songs')">
+                    <button class= "text-white py-2 rounded-3xl w-[120px] border-solid border border-white font-bold" @click="toggleList('songs')">
                         Mis canciones
                     </button>
-                    <button class="text-white py-2 rounded-3xl w-[120px] border-solid border border-white text-sm" @click="toggleList('playlists')">
+                    <button class="text-white py-2 rounded-3xl w-[120px] border-solid border border-white font-bold" @click="toggleList('playlists')">
                         Mis playlist
                     </button>
                 </div>
             </div>
         </ion-header>
-        <ion-content style="--background: #212121">
-            <ion-list class="bg-[#212121]" >
+        <ion-content style="--background: #121212">
+            <ion-list class="bg-[#121212] mt-4">
                 <div v-if="showMySongs" >
                     <h1 class="text-white text-2xl ml-5 mb-3 font-bold">
                         Tus canciones
@@ -89,12 +89,17 @@ const getUserSongs = async () => {
     try {
         const response = await fetchUserSongs();
         mainStore.loadMySongs(response);
-    } catch (error) {
+        console.log('Se obtuvieron las canciones del usuario')
+    } catch (error: any) {
+    if(error.response.status === 404) {
+        console.log('No se encontraron canciones del usuario')
+    } else
         console.error('Hubo un error al hacer fetch:', error);
     }
 };
 
 watch(() => mainStore.user, (newUser) => {
+    if(newUser === null) return;
     getUserSongs();
 });
 
