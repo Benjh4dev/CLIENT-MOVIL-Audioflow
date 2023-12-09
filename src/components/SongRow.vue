@@ -1,5 +1,5 @@
 <template>
-    <div @click="playSong" class="text-white flex h-[70px] items-center active:bg-green-500">
+    <div @click="playSong" class="text-white flex h-[70px] border-opacity-20 border-black border items-center active:bg-green-500">
         <img :src="props.song.coverURL"
             class="h-[50px] w-[50px] ml-5 rounded-md">
         <div class="ml-3">

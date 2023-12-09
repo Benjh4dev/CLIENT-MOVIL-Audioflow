@@ -3,7 +3,7 @@
         <ion-header class="shadow-none">
             <TopBar></TopBar>
         </ion-header>
-        <ion-content style="--background: #212121">
+        <ion-content style="--background: #121212">
             <ion-list class="bg-[#121212]">
                 <h1 class="text-white text-2xl ml-5 mb-3 font-bold mt-4">
                     {{ playlist.name }}

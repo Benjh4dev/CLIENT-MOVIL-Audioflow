@@ -16,10 +16,10 @@
                 </div>
 
                 <div class="flex space-x-4 justify-center mt-5">
-                    <button class= "text-white py-2 rounded-3xl w-[120px] border-solid border border-white font-bold" @click="toggleList('songs')">
+                    <button :class="{ 'bg-green-700 border-green-800 text-gray-800 text-opacity-50 transition-all ease-in-out duration-200': showMyPlaylists }" class="text-white py-2 rounded-3xl w-[120px] border-solid border border-white font-bold" @click="toggleList('songs')">
                         Mis canciones
                     </button>
-                    <button class="text-white py-2 rounded-3xl w-[120px] border-solid border border-white font-bold" @click="toggleList('playlists')">
+                    <button :class="{ 'bg-green-700 border-green-800 text-gray-800 text-opacity-50 transition-all ease-in-out duration-200': showMySongs }" class="text-white py-2 rounded-3xl w-[120px] border-solid border border-white font-bold" @click="toggleList('playlists')">
                         Mis playlist
                     </button>
                 </div>
