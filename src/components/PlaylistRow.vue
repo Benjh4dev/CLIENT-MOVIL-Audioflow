@@ -34,7 +34,8 @@ const props = defineProps({
 });
 
 const SelectPlaylist = () => {
-    router.push(`/`)
+    const id = props.playlist.id;
+    router.push({name: 'Playlist', params: {id}});
     
 };
 </script>

@@ -44,9 +44,8 @@
                             >
                             <div
                                 class="pointer-events-none mt-[6px] absolute h-[4px] z-10 inset-y-0 left-0 w-0 bg-green-500"
-                                :style="`width: ${range}%;`"
-                            />
-                            <div class="absolute h-[4px] z-[-0] mt-[6px] inset-y-0 left-0 w-full bg-gray-700 rounded-full" />
+                                :style="`width: ${range}%;`"></div>
+                            <div class="absolute h-[4px] z-[-0] mt-[6px] inset-y-0 left-0 w-full bg-gray-700 rounded-full"></div>
                         </div>
                         <div class="text-white text-[12px] pl-2 pt-[11px] pr-3">{{ formattedDuration }}</div>
                     </div>
