@@ -19,3 +19,7 @@ export async function fetchUserPlaylists() {
 
     return userPlaylists;
 };
+export async function fetchPlaylistById(playlistId: string) {
+    const response = await api.get(`/playlist/${playlistId}`)
+    return response.data;
+};

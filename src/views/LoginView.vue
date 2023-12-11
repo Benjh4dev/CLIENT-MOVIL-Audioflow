@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page id="test">
     <ion-content :fullscreen="true" class="container">
       <ion-row>
         <ion-img
@@ -72,8 +72,8 @@
 
 <script setup lang="ts">
 import { IonContent, IonPage, IonImg, IonRow, IonInput, IonButton, IonCol, IonLabel } from '@ionic/vue';
-import { ref, watch } from 'vue';
-
+import { ref, watch, onMounted } from 'vue';
+import { createGesture } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { useMainStore } from '@/stores/main';
 import { usePlayerStore } from '@/stores/player';
@@ -132,6 +132,16 @@ async function loginUser(): Promise<void> {
       errors.value = "Hubo un error, inténtelo más tarde";
     }
   }
+onMounted(() => {
+const gesture = createGesture({
+  el: document.getElementById('test')!,
+  threshold: 0,
+  gestureName: 'goback-swipe',
+  gesturePriority: 40.5, // priority of swipe to go back is 40
+  onMove: ev => console.log(ev)
+  });
+gesture.enable(true);
+});
 </script>
 
 <style scoped>

@@ -1,5 +1,5 @@
 <template>
-    <div @click="SelectPlaylist" class=" text-white flex h-[70px] items-center active:bg-blue-500">
+    <div @click="SelectPlaylist" class=" text-white flex h-[70px] items-center active:bg-green-500">
         <img :src="props.playlist.image"
             class="h-[50px] w-[50px] ml-5 rounded-md">
         <div class="ml-3">
@@ -34,7 +34,8 @@ const props = defineProps({
 });
 
 const SelectPlaylist = () => {
-    router.push(`/`)
+    const id = props.playlist.id;
+    router.push({name: 'Playlist', params: {id}});
     
 };
 </script>
